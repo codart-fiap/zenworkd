@@ -1,98 +1,304 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html class="light" lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recursos - ZenWork</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ZenWork - Gerenciar Recursos</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!-- Configuração do Tailwind (IDÊNTICA à do dashboard) -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#24a5e5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111c21",
+                        "card-light": "#ffffff",
+                        "card-dark": "#19272e",
+                        "border-light": "#e7e7e7",
+                        "border-dark": "#2a3b47",
+                        "text-main-light": "#0e171b",
+                        "text-main-dark": "#f0f2f4",
+                        "text-secondary-light": "#4e7f97",
+                        "text-secondary-dark": "#a0b1c0",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100">
-
-    <div class="flex h-screen bg-gray-100">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-md">
-            <div class="p-6">
-                <h1 class="text-3xl font-bold text-center text-blue-600">ZenWork</h1>
+<body
+    class="font-display bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark">
+    <div class="relative flex min-h-screen w-full">
+        <!-- Barra Lateral do Admin (IDÊNTICA à do dashboard) -->
+        <aside
+            class="flex w-64 flex-col border-r border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark p-4 sticky top-0 h-screen">
+            <div class="flex items-center gap-3 p-3">
+                <div class="size-8 text-primary">
+                    <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                       <path d="M39.5563 34.1455V13.8546C39.5563 15.708 36.8773 17.3437 32.7927 18.3189C30.2914 18.916 27.263 19.2655 24 19.2655C20.737 19.2655 17.7086 18.916 15.2073 18.3189C11.1227 17.3437 8.44365 15.708 8.44365 13.8546V34.1455C8.44365 35.9988 11.1227 37.6346 15.2073 38.6098C17.7086 39.2069 20.737 39.5564 24 39.5564C27.263 39.5564 30.2914 39.2069 32.7927 38.6098C36.8773 37.6346 39.5563 35.9988 39.5563 34.1455Z"></path>
+                       <path clip-rule="evenodd" d="M10.4485 13.8519C10.4749 13.9271 10.6203 14.246 11.379 14.7361C12.298 15.3298 13.7492 15.9145 15.6717 16.3735C18.0007 16.9296 20.8712 17.2655 24 17.2655C27.1288 17.2655 29.9993 16.9296 32.3283 16.3735C34.2508 15.9145 35.702 15.3298 36.621 14.7361C37.3796 14.246 37.5251 13.9271 37.5515 13.8519C37.5287 13.7876 37.4333 13.5973 37.0635 13.2931C36.5266 12.8516 35.6288 12.3647 34.343 11.9175C31.79 11.0295 28.1333 10.4437 24 10.4437C19.8667 10.4437 16.2099 11.0295 13.657 11.9175C12.3712 12.3647 11.4734 12.8516 10.9365 13.2931C10.5667 13.5973 10.4713 13.7876 10.4485 13.8519ZM37.5563 18.7877C36.3176 19.3925 34.8502 19.8839 33.2571 20.2642C30.5836 20.9025 27.3973 21.2655 24 21.2655C20.6027 21.2655 17.4164 20.9025 14.7429 20.2642C13.1498 19.8839 11.6824 19.3925 10.4436 18.7877V34.1275C10.4515 34.1545 10.5427 34.4867 11.379 35.027C12.298 35.6207 13.7492 36.2054 15.6717 36.6644C18.0007 37.2205 20.8712 37.5564 24 37.5564C27.1288 37.5564 29.9993 37.2205 32.3283 36.6644C34.2508 36.2054 35.702 35.6207 36.621 35.027C37.4573 34.4867 37.5485 34.1546 37.5563 34.1275V18.7877ZM41.5563 13.8546V34.1455C41.5563 36.1078 40.158 37.5042 38.7915 38.3869C37.3498 39.3182 35.4192 40.0389 33.2571 40.5551C30.5836 41.1934 27.3973 41.5564 24 41.5564C20.6027 41.5564 17.4164 41.1934 14.7429 40.5551C12.5808 40.0389 10.6502 39.3182 9.20848 38.3869C7.84205 37.5042 6.44365 36.1078 6.44365 34.1455L6.44365 13.8546C6.44365 12.2684 7.37223 11.0454 8.39581 10.2036C9.43325 9.3505 10.8137 8.67141 12.343 8.13948C15.4203 7.06909 19.5418 6.44366 24 6.44366C28.4582 6.44366 32.5797 7.06909 35.657 8.13948C37.1863 8.67141 38.5667 9.3505 39.6042 10.2036C40.6278 11.0454 41.5563 12.2684 41.5563 13.8546Z" fill="currentColor" fill-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h1 class="text-xl font-bold tracking-[-0.015em] text-text-main-light dark:text-text-main-dark">ZenWork</h1>
             </div>
-            <nav class="mt-6">
-                <!-- Item de navegação Check-in -->
-                <a href="./dashboard.html" class="flex items-center px-4 py-2 text-gray-700 rounded-md hover:bg-gray-200">
-                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    Check-in
-                </a>
-                
-                <!-- Item de navegação Histórico -->
-                <a href="./historico.html" class="flex items-center px-4 py-2 mt-4 text-gray-700 rounded-md hover:bg-gray-200">
-                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    Histórico
-                </a>
-
-                <!-- Item de navegação Recursos (Ativo) -->
-                <a href="./recursos.html" class="flex items-center px-4 py-2 mt-4 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-200">
-                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
-                        </path>
-                    </svg>
-                    Recursos
-                </a>
-            </nav>
+            <div class="flex h-full flex-col justify-between pt-8">
+                <div class="flex flex-col gap-2">
+                    <a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-light dark:text-text-secondary-dark dark:hover:bg-white/10 hover:bg-black/5"
+                        href="./admin-dashboard.html">
+                        <span class="material-symbols-outlined">dashboard</span>
+                        <p class="text-sm font-medium leading-normal">Dashboard</p>
+                    </a>
+                    <!-- Link do Gerenciamento está ATIVO -->
+                    <a class="flex items-center gap-3 rounded-lg bg-primary/20 dark:bg-primary/30 px-3 py-2 text-primary dark:text-white"
+                        href="./admin-recursos.html">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">folder</span>
+                        <p class="text-sm font-medium leading-normal">Gerenciar Recursos</p>
+                    </a>
+                </div>
+                <!-- Perfil do Usuário na Sidebar -->
+                <div class="flex flex-col gap-4 border-t border-border-light dark:border-border-dark pt-4">
+                    <div class="flex gap-3 items-center">
+                        <div id="user-avatar" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                            data-alt="Avatar of Admin"
+                            style='background-image: url("https://placehold.co/100x100/24a5e5/FFFFFF?text=A&font=inter");'>
+                        </div>
+                        <div class="flex flex-col">
+                            <h1 id="user-name" class="text-base font-medium leading-normal text-text-main-light dark:text-text-main-dark">Admin...</h1>
+                            <p class="text-sm font-normal leading-normal text-text-secondary-light dark:text-text-secondary-dark">Admin</JSON.parse(usuarioString);
+                        </div>
+                    </div>
+                     <button id="logout-button-sidebar"
+                        class="flex w-full items-center justify-center gap-2 rounded-lg h-10 px-4 bg-gray-200 dark:bg-gray-700 text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-colors">
+                        <span class="material-symbols-outlined text-xl">logout</span>
+                        <span class="truncate">Sair</span>
+                    </button>
+                </div>
+            </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-6">
-            <h2 class="text-2xl font-semibold text-gray-700">Recursos de Ajuda</h2>
-            <p class="text-gray-600">Encontre artigos, vídeos e contatos úteis.</p>
-
-            <!-- Grid de Recursos -->
-            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                <!-- Card Recurso 1: Artigo -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <img class="h-48 w-full object-cover" src="https://placehold.co/600x400/3498db/ffffff?text=Artigo" alt="Imagem do artigo">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Como lidar com o Estresse no Trabalho</h3>
-                        <p class="text-gray-600 text-sm mb-4">Dicas práticas para gerenciar a pressão do dia a dia e manter a calma.</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-700 font-semibold">Ler artigo →</a>
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8">
+            <div class="max-w-7xl mx-auto flex flex-col gap-6">
+                <!-- Cabeçalho -->
+                <header class="flex flex-wrap justify-between items-start gap-4">
+                    <div class="flex flex-col gap-2">
+                        <h1 class="text-text-main-light dark:text-text-main-dark text-3xl font-black tracking-tight">Gerenciamento da Biblioteca</h1>
+                        <p class="text-text-secondary-light dark:text-text-secondary-dark text-base font-normal">Adicione, edite ou remova artigos, vídeos e outros materiais de apoio.</p>
+                    </div>
+                    <!-- Botão para ir para o formulário de ADICIONAR -->
+                    <a href="./admin-form.html"
+                        class="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-opacity-90 transition-colors">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        <span class="truncate">Adicionar Novo Recurso</span>
+                    </a>
+                </header>
+                
+                <!-- Barra de Busca -->
+                <div class="flex justify-between items-center gap-4 bg-card-light dark:bg-card-dark p-3 rounded-xl border border-border-light dark:border-border-dark">
+                    <div class="relative w-full max-w-sm">
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <span class="material-symbols-outlined text-text-secondary-light dark:text-text-secondary-dark">search</span>
+                        </div>
+                        <input
+                            class="w-full pl-10 pr-4 py-2 rounded-lg bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark focus:ring-primary focus:border-primary"
+                            placeholder="Buscar por título ou categoria..." type="text" id="search-input" />
                     </div>
                 </div>
 
-                <!-- Card Recurso 2: Vídeo -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <img class="h-48 w-full object-cover" src="https://placehold.co/600x400/2ecc71/ffffff?text=Vídeo" alt="Imagem do vídeo">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Meditação Guiada de 5 Minutos</h3>
-                        <p class="text-gray-600 text-sm mb-4">Uma pausa rápida para re-centralizar sua mente e melhorar o foco.</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-700 font-semibold">Assistir vídeo →</a>
+                <!-- Mensagem de Loading/Erro/Vazio -->
+                <div id="table-message" class="text-center py-10">
+                    <p class="text-text-secondary-light dark:text-text-secondary-dark">Carregando recursos...</p>
+                </div>
+                
+                <!-- Tabela de Recursos (CRUD - Read) -->
+                <div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-background-light dark:bg-background-dark/50">
+                                <tr>
+                                    <th class="px-6 py-4 text-text-main-light dark:text-text-main-dark text-sm font-medium">Título do Recurso</th>
+                                    <th class="px-6 py-4 text-text-main-light dark:text-text-main-dark text-sm font-medium">Categoria</th>
+                                    <th class="px-6 py-4 text-text-main-light dark:text-text-main-dark text-sm font-medium text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <!-- Corpo da tabela será preenchido pelo JS -->
+                            <tbody class="divide-y divide-border-light dark:divide-border-dark" id="recursos-table-body">
+                                <!-- As linhas serão inseridas aqui pelo JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
-                <!-- Card Recurso 3: Contato -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <img class="h-48 w-full object-cover" src="https://placehold.co/600x400/e74c3c/ffffff?text=Contato" alt="Imagem do contato">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Apoio Psicológico</h3>
-                        <p class="text-gray-600 text-sm mb-4">Canal de atendimento confidencial para conversar com um profissional.</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-700 font-semibold">Entrar em contato →</a>
-                    </div>
-                </div>
-
-                <!-- Mais cards podem ser adicionados aqui -->
-
             </div>
         </main>
     </div>
 
+    <!-- JavaScript da Página -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Gerenciamento de Sessão (Admin) ---
+            const userNameEl = document.getElementById('user-name');
+            const userAvatarEl = document.getElementById('user-avatar');
+            const logoutButtonSidebar = document.getElementById('logout-button-sidebar');
+
+            const usuarioString = sessionStorage.getItem('zenworkUser');
+            let usuario = null;
+
+            if (usuarioString) {
+                try {
+                    usuario = JSON.parse(usuarioString);
+                } catch (e) {
+                    window.location.href = './login.html';
+                }
+            }
+
+            if (!usuario || !usuario.isAdmin) {
+                console.warn("Acesso não autorizado. Usuário não é admin.");
+                sessionStorage.removeItem('zenworkUser');
+                window.location.href = './login.html';
+            } else {
+                const adminName = usuario.nome.split(' ')[0];
+                userNameEl.textContent = adminName;
+                const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'A';
+                userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/24a5e5/FFFFFF?text=${inicial}&font=inter")`;
+            }
+
+            logoutButtonSidebar.addEventListener('click', (e) => {
+                e.preventDefault();
+                sessionStorage.removeItem('zenworkUser');
+                window.location.href = './login.html';
+            });
+            // --- Fim da Sessão ---
+
+            // --- Lógica do CRUD (Read) ---
+            const tableBody = document.getElementById('recursos-table-body');
+            const tableMessage = document.getElementById('table-message');
+
+            // Função para criar uma linha da tabela
+            function createTableRow(recurso) {
+                return `
+                    <tr class="hover:bg-primary/5 dark:hover:bg-primary/10" data-id="${recurso.idRecurso}">
+                        <td class="px-6 py-4 text-sm font-normal text-text-main-light dark:text-text-main-dark">${recurso.titulo}</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary dark:text-primary">${recurso.categoria}</span>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-medium">
+                            <div class="flex items-center justify-end gap-2">
+                                <!-- Botão Editar: Redireciona para admin-form.html com o ID -->
+                                <a href="./admin-form.html?id=${recurso.idRecurso}" class="p-2 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" title="Editar">
+                                    <span class="material-symbols-outlined text-base">edit</span>
+                                </a>
+                                <!-- Botão Deletar: Chama a função deleteRecurso() -->
+                                <button onclick="deleteRecurso(${recurso.idRecurso})" class="p-2 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-500 transition-colors" title="Deletar">
+                                    <span class="material-symbols-outlined text-base">delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            // Função para carregar todos os recursos
+            async function loadRecursos() {
+                tableMessage.classList.remove('hidden');
+                tableMessage.textContent = 'Carregando recursos...';
+                
+                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
+                // Você precisará criar um Servlet (ex: /demo/admin/recursos) que responde a GET
+                const url = '/demo/admin-recursos'; // Mapeamento do seu futuro Servlet
+
+                try {
+                    // ** SIMULAÇÃO DE DADOS (Enquanto o backend não está pronto) **
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    const mockRecursos = [
+                        { idRecurso: 1, titulo: "Guia de Meditação para Iniciantes", categoria: "Ansiedade", linkExterno: "#" },
+                        { idRecurso: 2, titulo: "Workshop sobre Gestão de Estresse", categoria: "Liderança", linkExterno: "#" },
+                        { idRecurso: 3, titulo: "Técnicas de Comunicação Não-Violenta", categoria: "Comunicação", linkExterno: "#" },
+                        { idRecurso: 4, titulo: "Como Manter o Foco no Trabalho Remoto", categoria: "Produtividade", linkExterno: "#" }
+                    ];
+                    
+                    const data = mockRecursos; // Usando mock
+                    
+                    /*
+                    // --- CÓDIGO REAL (quando o backend estiver pronto) ---
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error("Erro ao buscar dados");
+                    const data = await response.json();
+                    */
+                   
+                    tableBody.innerHTML = ''; // Limpa a tabela
+                    if (data && data.length > 0) {
+                        tableMessage.classList.add('hidden');
+                        data.forEach(rec => {
+                            tableBody.innerHTML += createTableRow(rec);
+                        });
+                    } else {
+                        tableMessage.textContent = 'Nenhum recurso encontrado. Clique em "Adicionar Novo Recurso" para começar.';
+                    }
+
+                } catch (error) {
+                    console.error("Erro ao carregar recursos:", error);
+                    tableMessage.textContent = 'Erro ao carregar recursos. O backend está rodando?';
+                    tableMessage.classList.add('text-red-500');
+                }
+            }
+            
+            // Função Global para Deletar (CRUD - Delete)
+            // Deixamos como global (anexada ao window) para que o `onclick` na tabela funcione
+            window.deleteRecurso = async (id) => {
+                if (!confirm(`Tem certeza que deseja excluir o recurso ID ${id}?`)) {
+                    return;
+                }
+                
+                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
+                // O Servlet /demo/admin/recursos deve responder a DELETE
+                const url = `/demo/admin-recursos?id=${id}`;
+                
+                try {
+                    // ** SIMULAÇÃO DE DELETE **
+                    console.log(`Simulando DELETE para o ID: ${id}`);
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    // Remove a linha da tabela na interface
+                    document.querySelector(`tr[data-id="${id}"]`).remove();
+                    alert("Recurso deletado (simulação).");
+                    
+                    /*
+                    // --- CÓDIGO REAL (quando o backend estiver pronto) ---
+                    const response = await fetch(url, { method: 'DELETE' });
+                    const data = await response.json();
+
+                    if (response.ok && data.status === 'success') {
+                        // Remove a linha da tabela na interface
+                         document.querySelector(`tr[data-id="${id}"]`).remove();
+                    } else {
+                        alert("Erro ao deletar recurso: " + data.message);
+                    }
+                    */
+                
+                } catch (error) {
+                    console.error("Erro ao deletar:", error);
+                    alert("Erro de conexão ao tentar deletar.");
+                }
+            }
+
+            // Carrega os dados ao iniciar a página
+            loadRecursos();
+        });
+    </script>
 </body>
 </html>
