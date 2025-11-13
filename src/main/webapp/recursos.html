@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ZenWork - Recursos Recomendados</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!-- 
+      *** CONFIGURAÇÃO UNIFICADA DO TAILWIND ***
+    -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#48B2A9", // Verde-azulado calmo
+                        "background-light": "#F8F9FA", // Cinza muito claro
+                        "background-dark": "#111c21",
+                        "text-main-light": "#343A40", // Cinza escuro
+                        "text-main-dark": "#E9ECEF",
+                        "text-secondary-light": "#6c757d",
+                        "text-secondary-dark": "#adb5bd",
+                        "border-light": "#dee2e6",
+                        "border-dark": "#495057",
+                        "card-light": "#FFFFFF",
+                        "card-dark": "#1a2a32",
+                        "happy": "#FFF4D5",
+                        "neutral": "#E9ECEF",
+                        "tired": "#E6E6FA",
+                        "stressed": "#FFE5D9",
+                        "happy-dark": "#57481D",
+                        "neutral-dark": "#495057",
+                        "tired-dark": "#505072",
+                        "stressed-dark": "#613A2B"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark">
+    <div class="relative flex min-h-screen w-full group/design-root overflow-x-hidden">
+        
+        <!-- 
+          *** BARRA LATERAL UNIFICADA ***
+        -->
+        <aside class="flex-col w-64 gap-8 border-r border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark p-6 hidden lg:flex fixed h-full">
+            <!-- Logo -->
+            <div class="flex flex-col gap-2">
+                <div class="flex items-center gap-3">
+                    <div class="text-primary size-7">
+                        <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M39.5563 34.1455V13.8546C39.5563 15.708 36.8773 17.3437 32.7927 18.3189C30.2914 18.916 27.263 19.2655 24 19.2655C20.737 19.2655 17.7086 18.916 15.2073 18.3189C11.1227 17.3437 8.44365 15.708 8.44365 13.8546V34.1455C8.44365 35.9988 11.1227 37.6346 15.2073 38.6098C17.7086 39.2069 20.737 39.5564 24 39.5564C27.263 39.5564 30.2914 39.2069 32.7927 38.6098C36.8773 37.6346 39.5563 35.9988 39.5563 34.1455Z"></path>
+                           <path clip-rule="evenodd" d="M10.4485 13.8519C10.4749 13.9271 10.6203 14.246 11.379 14.7361C12.298 15.3298 13.7492 15.9145 15.6717 16.3735C18.0007 16.9296 20.8712 17.2655 24 17.2655C27.1288 17.2655 29.9993 16.9296 32.3283 16.3735C34.2508 15.9145 35.702 15.3298 36.621 14.7361C37.3796 14.246 37.5251 13.9271 37.5515 13.8519C37.5287 13.7876 37.4333 13.5973 37.0635 13.2931C36.5266 12.8516 35.6288 12.3647 34.343 11.9175C31.79 11.0295 28.1333 10.4437 24 10.4437C19.8667 10.4437 16.2099 11.0295 13.657 11.9175C12.3712 12.3647 11.4734 12.8516 10.9365 13.2931C10.5667 13.5973 10.4713 13.7876 10.4485 13.8519ZM37.5563 18.7877C36.3176 19.3925 34.8502 19.8839 33.2571 20.2642C30.5836 20.9025 27.3973 21.2655 24 21.2655C20.6027 21.2655 17.4164 20.9025 14.7429 20.2642C13.1498 19.8839 11.6824 19.3925 10.4436 18.7877V34.1275C10.4515 34.1545 10.5427 34.4867 11.379 35.027C12.298 35.6207 13.7492 36.2054 15.6717 36.6644C18.0007 37.2205 20.8712 37.5564 24 37.5564C27.1288 37.5564 29.9993 37.2205 32.3283 36.6644C34.2508 36.2054 35.702 35.6207 36.621 35.027C37.4573 34.4867 37.5485 34.1546 37.5563 34.1275V18.7877ZM41.5563 13.8546V34.1455C41.5563 36.1078 40.158 37.5042 38.7915 38.3869C37.3498 39.3182 35.4192 40.0389 33.2571 40.5551C30.5836 41.1934 27.3973 41.5564 24 41.5564C20.6027 41.5564 17.4164 41.1934 14.7429 40.5551C12.5808 40.0389 10.6502 39.3182 9.20848 38.3869C7.84205 37.5042 6.44365 36.1078 6.44365 34.1455L6.44365 13.8546C6.44365 12.2684 7.37223 11.0454 8.39581 10.2036C9.43325 9.3505 10.8137 8.67141 12.343 8.13948C15.4203 7.06909 19.5418 6.44366 24 6.44366C28.4582 6.44366 32.5797 7.06909 35.657 8.13948C37.1863 8.67141 38.5667 9.3505 39.6042 10.2036C40.6278 11.0454 41.5563 12.2684 41.5563 13.8546Z" fill-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-xl font-bold leading-tight tracking-[-0.015em] text-text-main-light dark:text-text-main-dark">ZenWork</h1>
+                </div>
+            </div>
+            <!-- Navegação -->
+            <nav class="flex flex-col gap-2">
+                <a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark transition-colors" href="./dashboard.html"><span class="material-symbols-outlined !text-2xl">sentiment_satisfied</span><span class="font-medium">Check-in</span></a>
+                <a class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark transition-colors" href="./historico.html"><span class="material-symbols-outlined !text-2xl">history</span><span class="font-medium">Meu Histórico</span></a>
+                <!-- Link "Recursos" está ATIVO -->
+                <a class="flex items-center gap-3 rounded-lg px-3 py-2 bg-primary/10 text-primary transition-colors font-bold" href="./recursos.html"><span class="material-symbols-outlined !text-2xl">menu_book</span><span class="">Recursos</span></a>
+            </nav>
+            <!-- Link de Admin (Condicional) -->
+            <nav id="admin-link-container" class="mt-4 pt-4 border-t border-border-light dark:border-border-dark">
+                <!-- O JavaScript vai inserir o link do admin aqui se necessário -->
+            </nav>
+
+            <!-- Logout no final da barra lateral -->
+            <nav class="mt-auto pt-4">
+                 <a id="logout-button" class="flex items-center gap-3 rounded-lg px-3 py-2 text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark transition-colors" href="#">
+                    <span class="material-symbols-outlined !text-2xl">logout</span>
+                    <span class="font-medium">Sair</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <div class="flex flex-col flex-1 lg:pl-64">
+            <!-- Cabeçalho com Avatar -->
+            <header class="flex items-center justify-between whitespace-nowrap px-2 md:px-6 py-4 mb-8">
+                <div>
+                     <!-- Botão de Menu Mobile (para telas menores que lg) -->
+                     <button class="lg:hidden text-text-secondary-light dark:text-text-secondary-dark" id="mobile-menu-button">
+                        <span class="material-symbols-outlined !text-3xl">menu</span>
+                    </button>
+                </div>
+                <div class="flex flex-1 justify-end items-center gap-4">
+                    <p class="text-base font-medium" id="user-name">Olá, ...</p>
+                    <div id="user-avatar" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar do usuário" style='background-image: url("https://placehold.co/100x100/48B2A9/FFFFFF?text=Z&font=inter");'></div>
+                </div>
+            </header>
+
+            <!-- Área de Conteúdo -->
+            <main class="flex flex-1 justify-center py-10 sm:py-12 px-4 sm:px-8">
+                <div class="layout-content-container flex flex-col w-full max-w-5xl gap-8 sm:gap-12">
+                    
+                    <!-- Cabeçalho da Página -->
+                    <section class="text-center">
+                        <h1 class="text-text-main-light dark:text-text-main-dark tracking-tight text-3xl sm:text-4xl font-bold leading-tight pb-2">Obrigado por compartilhar.</h1>
+                        <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg font-normal leading-normal">Aqui estão alguns recursos que podem te ajudar hoje.</p>
+                    </section>
+
+                    <!-- Banner de Ação Urgente -->
+                    <section>
+                        <div class="p-4 @container">
+                            <div class="flex flex-col items-center justify-start rounded-xl @xl:flex-row @xl:items-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)] bg-card-light dark:bg-card-dark p-6 sm:p-8">
+                                <div class="flex w-full min-w-72 grow flex-col items-center text-center @xl:items-start @xl:text-left justify-center gap-2">
+                                    <p class="text-text-main-light dark:text-text-main-dark text-xl font-bold leading-tight tracking-[-0.015em]">Precisa de apoio imediato?</p>
+                                    <p class="text-text-secondary-light dark:text-text-secondary-dark text-base font-normal leading-normal max-w-md">Converse com um profissional para receber orientação e suporte especializado a qualquer momento.</p>
+                                </div>
+                                <div class="w-full @xl:w-auto mt-6 @xl:mt-0 flex justify-center @xl:justify-end">
+                                    <!-- O botão do psicólogo - um link mailto: como planejado -->
+                                    <a href="mailto:rh@empresa.com?subject=Solicitação de Apoio - ZenWork" id="contact-psychologist-btn" class="flex min-w-[240px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-medium leading-normal shadow-sm hover:opacity-90 transition-opacity">
+                                        <span class="material-symbols-outlined text-xl">call</span>
+                                        <span class="truncate">Falar com um Profissional</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Grade de Recursos -->
+                    <section>
+                        <h2 class="text-text-main-light dark:text-text-main-dark text-2xl font-bold leading-tight tracking-tight px-4 pb-4">Recursos Recomendados</h2>
+                        <!-- O contêiner da grade será preenchido pelo JavaScript -->
+                        <div id="resource-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+                            <!-- Cards de Recurso serão injetados aqui -->
+                        </div>
+                         <!-- Mensagem de Carregamento/Vazio -->
+                        <div id="grid-message" class="px-4 text-center text-text-secondary-light dark:text-text-secondary-dark">
+                            <p>Carregando recursos...</p>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 
+      *** SCRIPT UNIFICADO ***
+    -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elementos Globais
+            const userNameEl = document.getElementById('user-name');
+            const userAvatarEl = document.getElementById('user-avatar');
+            const adminLinkContainer = document.getElementById('admin-link-container');
+            const logoutButton = document.getElementById('logout-button');
+
+            // Elementos Específicos da Página
+            const resourceGrid = document.getElementById('resource-grid');
+            const gridMessage = document.getElementById('grid-message');
+            
+            // --- Gerenciamento de Sessão (Unificado) ---
+            const usuarioString = sessionStorage.getItem('zenworkUser');
+            let usuario = null;
+
+            if (usuarioString) {
+                usuario = JSON.parse(usuarioString);
+            }
+
+            if (usuario) {
+                userNameEl.textContent = `Olá, ${usuario.nome}!`;
+                const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'Z';
+                userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/48B2A9/FFFFFF?text=${inicial}&font=inter")`;
+
+                if (usuario.isAdmin) {
+                    adminLinkContainer.innerHTML = `
+                        <a class="flex items-center gap-3 rounded-lg px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" href="./admin-recursos.html">
+                            <span class="material-symbols-outlined !text-2xl">admin_panel_settings</span>
+                            <span class="font-bold">Painel Admin</span>
+                        </a>`;
+                }
+            } else {
+                window.location.href = './login.html';
+            }
+
+            logoutButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                sessionStorage.removeItem('zenworkUser');
+                // fetch('/demo/logout', { method: 'POST' })
+                // .then(() => window.location.href = './login.html');
+                console.log('Logout...');
+                window.location.href = './login.html';
+            });
+            // --- Fim do Gerenciamento de Sessão ---
+
+
+            // --- Lógica Específica desta Página (Recursos) ---
+
+            if(resourceGrid) { // Garante que este código só rode na página de recursos
+                
+                // Função para criar o HTML de um card de recurso
+                function createResourceCard(recurso) {
+                    const tags = {
+                        "Artigo": "bg-orange-500/20 text-orange-500",
+                        "Vídeo": "bg-blue-500/20 text-blue-500",
+                        "Contato": "bg-red-500/20 text-red-500",
+                        "Padrão": "bg-gray-500/20 text-gray-500"
+                    };
+                    const tagColor = tags[recurso.categoria] || tags["Padrão"];
+
+                    return `
+                        <div class="flex flex-col bg-card-light dark:bg-card-dark rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)] overflow-hidden">
+                            <div class="p-6 flex flex-col items-start gap-3 flex-grow">
+                                <span class="text-xs font-medium px-3 py-1 rounded-full ${tagColor} dark:text-opacity-90">${recurso.categoria}</span>
+                                <h3 class="text-text-main-light dark:text-text-main-dark text-lg font-bold leading-tight">${recurso.titulo}</h3>
+                                <p class="text-text-secondary-light dark:text-text-secondary-dark text-sm leading-relaxed flex-grow">${recurso.descricao}</p>
+                                <a href="${recurso.linkExterno}" target="_blank" rel="noopener noreferrer" class="mt-2 w-full flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark text-text-main-light dark:text-text-main-dark text-sm font-medium leading-normal hover:bg-border-light dark:hover:bg-border-dark/40 transition-colors">
+                                    Acessar Recurso
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Função para carregar os recursos
+                async function loadResources() {
+                    // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
+                    const url = '/demo/recursos'; // URL correta
+                    
+                    try {
+                        const response = await fetch(url);
+                        if (!response.ok) {
+                            throw new Error(`O backend ainda não responde em ${url}`);
+                        }
+                        const recursos = await response.json();
+
+                        if (recursos && recursos.length > 0) {
+                            gridMessage.classList.add('hidden'); // Oculta a mensagem de "carregando"
+                            resourceGrid.innerHTML = ''; // Limpa a grade
+                            recursos.forEach(recurso => {
+                                resourceGrid.innerHTML += createResourceCard(recurso);
+                            });
+                        } else {
+                            gridMessage.textContent = 'Nenhum recurso encontrado.';
+                        }
+
+                    } catch (error) {
+                        // *** SIMULAÇÃO DE DADOS ***
+                        // Remova este bloco 'catch' e descomente o 'try' quando o backend estiver pronto
+                        console.warn(error.message, "Usando dados de simulação.");
+                        gridMessage.classList.add('hidden');
+                        resourceGrid.innerHTML = ''; // Limpa a grade
+                        const mockRecursos = [
+                            { titulo: "5 técnicas para gerenciar o estresse", descricao: "Estratégias práticas para identificar e gerenciar o estresse.", linkExterno: "#", categoria: "Artigo" },
+                            { titulo: "Meditação guiada de 5 minutos", descricao: "Uma prática rápida para acalmar a mente e focar no presente.", linkExterno: "#", categoria: "Vídeo" },
+                            { titulo: "Alongamentos para Aliviar a Tensão", descricao: "Uma série de alongamentos para fazer na sua mesa.", linkExterno: "#", categoria: "Exercício" }
+                        ];
+                        mockRecursos.forEach(recurso => {
+                            resourceGrid.innerHTML += createResourceCard(recurso);
+                        });
+                        
+                        /*
+                        // Este é o código de erro real:
+                        console.error("Erro ao carregar recursos:", error);
+                        gridMessage.textContent = 'Erro ao carregar recursos. Tente novamente mais tarde.';
+                        gridMessage.classList.add('text-red-500');
+                        */
+                    }
+                }
+
+                // Carrega os recursos ao iniciar a página
+                loadResources();
+            }
+        });
+    </script>
+</body>
+</html>

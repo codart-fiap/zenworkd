@@ -1,0 +1,3 @@
+db.url=jdbc:oracle:thin:@SEU_HOST:1521:ORCL
+db.user=SEU_RM
+db.password=SUA_SENHA

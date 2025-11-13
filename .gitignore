@@ -1,0 +1,22 @@
+# Arquivo de propriedades com dados sensíveis
+src/main/resources/db.properties
+
+# Pasta de build do Maven (MUITO IMPORTANTE)
+# Isso ignora todos os .class, .jar, .war e a pasta /target inteira
+/target/
+
+# Arquivos de Log
+*.log
+access_log.*
+
+# Arquivos de configuração de IDEs
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db

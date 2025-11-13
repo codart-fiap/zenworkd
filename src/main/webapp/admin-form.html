@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ZenWork - Admin | Editar Recurso</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#24a5e5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111c21",
+                        "card-light": "#FFFFFF",
+                        "card-dark": "#1a2830",
+                        "border-light": "#e5e7eb",
+                        "border-dark": "#374151",
+                        "text-light": "#374151",
+                        "text-dark": "#f0f2f4",
+                        "text-subtle-light": "#6B7281",
+                        "text-subtle-dark": "#9ca3af",
+                        "input-bg-light": "#f9fafb",
+                        "input-bg-dark": "#1f2937",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "lg": "0.5rem", "xl": "0.75rem" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+    <div class="relative flex min-h-screen w-full">
+        <!-- Barra Lateral Admin -->
+        <aside class="flex h-screen flex-col justify-between border-r border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark p-4 w-64 sticky top-0">
+            <!-- ... (mesma barra lateral do admin-recursos.html) ... -->
+             <div class="flex flex-col gap-8">
+                <div class="flex items-center gap-3">
+                    <div class="size-10 text-primary">
+                        <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">...</svg> <!-- Logo SVG -->
+                    </div>
+                    <div class="flex flex-col">
+                        <h1 class="text-text-light dark:text-text-dark text-base font-medium">Admin ZenWork</h1>
+                        <p class="text-text-subtle-light dark:text-text-subtle-dark text-sm font-normal">RH/Gestor</p>
+                    </div>
+                </div>
+                <nav class="flex flex-col gap-2">
+                    <a class="flex items-center gap-3 px-3 py-2 text-text-light dark:text-text-dark hover:bg-background-light dark:hover:bg-background-dark rounded-lg transition-colors" href="#">
+                        <span class="material-symbols-outlined">dashboard</span>
+                        <p class="text-sm font-medium">Dashboard (Visão Geral)</p>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20 text-primary" href="./admin-recursos.html">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">import_contacts</span>
+                        <p class="text-sm font-medium">Biblioteca</p>
+                    </a>
+                </nav>
+            </div>
+            <div class="flex flex-col gap-1 border-t border-border-light dark:border-border-dark pt-4">
+                <a class="flex items-center gap-3 px-3 py-2 text-text-subtle-light dark:text-text-subtle-dark hover:bg-background-light dark:hover:bg-background-dark rounded-lg transition-colors" href="#" id="logout-button">
+                    <span class="material-symbols-outlined">logout</span>
+                    <p class="text-sm font-medium">Sair</p>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-8">
+            <div class="max-w-4xl mx-auto">
+                <!-- Breadcrumbs -->
+                <div class="flex flex-wrap gap-2 items-center text-sm">
+                    <a class="text-text-subtle-light dark:text-text-subtle-dark hover:text-primary dark:hover:text-primary" href="#">Painel Admin</a>
+                    <span class="text-text-subtle-light dark:text-text-subtle-dark">/</span>
+                    <a class="text-text-subtle-light dark:text-text-subtle-dark hover:text-primary dark:hover:text-primary" href="./admin-recursos.html">Recursos</a>
+                    <span class="text-text-subtle-light dark:text-text-subtle-dark">/</span>
+                    <span class="text-text-light dark:text-text-dark font-medium" id="page-mode">Adicionar Recurso</span>
+                </div>
+                
+                <!-- Título -->
+                <div class="flex flex-wrap justify-between gap-3 my-6 items-center">
+                    <h1 class="text-text-light dark:text-text-dark text-3xl font-bold tracking-tight" id="page-title">Adicionar Novo Recurso</h1>
+                </div>
+
+                <!-- Mensagem de Resposta -->
+                <div id="message-box" class="hidden w-full px-4 py-3 rounded-lg mb-4" role="alert">
+                    <span class="block sm:inline" id="message-text"></span>
+                </div>
+
+                <!-- Formulário (CREATE / UPDATE) -->
+                <div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm">
+                    <form id="resource-form" class="p-8 space-y-8">
+                        <!-- Campo Oculto para o ID (usado no modo Edição) -->
+                        <input type="hidden" id="id_recurso" name="id_recurso" value="">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Campo Título -->
+                            <div class="flex flex-col">
+                                <label class="text-text-light dark:text-text-dark text-sm font-medium pb-2" for="titulo">Título</label>
+                                <input class="form-input w-full rounded-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-light dark:border-border-dark bg-input-bg-light dark:bg-input-bg-dark focus:border-primary h-12 placeholder:text-text-subtle-light dark:placeholder:text-text-subtle-dark px-4 text-base" id="titulo" name="titulo" type="text" value="" required />
+                            </div>
+                            <!-- Campo Categoria -->
+                            <div class="flex flex-col">
+                                <label class="text-text-light dark:text-text-dark text-sm font-medium pb-2" for="categoria">Categoria</label>
+                                <input class="form-input w-full rounded-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-light dark:border-border-dark bg-input-bg-light dark:bg-input-bg-dark focus:border-primary h-12 placeholder:text-text-subtle-light dark:placeholder:text-text-subtle-dark px-4 text-base" id="categoria" name="categoria" type="text" placeholder="Ex: Artigo, Vídeo, Ansiedade" value="" required />
+                            </div>
+                        </div>
+                        <!-- Campo Descrição -->
+                        <div class="flex flex-col">
+                            <label class="text-text-light dark:text-text-dark text-sm font-medium pb-2" for="descricao">Descrição</label>
+                            <textarea class="form-textarea w-full rounded-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-light dark:border-border-dark bg-input-bg-light dark:bg-input-bg-dark focus:border-primary placeholder:text-text-subtle-light dark:placeholder:text-text-subtle-dark p-4 text-base" id="descricao" name="descricao" rows="5"></textarea>
+                        </div>
+                        <!-- Campo Link -->
+                        <div class="flex flex-col">
+                            <label class="text-text-light dark:text-text-dark text-sm font-medium pb-2" for="link_externo">Link Externo</label>
+                            <input class="form-input w-full rounded-lg text-text-light dark:text-text-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-light dark:border-border-dark bg-input-bg-light dark:bg-input-bg-dark focus:border-primary h-12 placeholder:text-text-subtle-light dark:placeholder:text-text-subtle-dark px-4 text-base" id="link_externo" name="link_externo" type="url" placeholder="https_//..." value="" required />
+                        </div>
+                        <!-- Botões de Ação -->
+                        <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
+                            <a href="./admin-recursos.html" class="px-6 py-2.5 rounded-lg text-sm font-semibold bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" type="button">Cancelar</a>
+                            <button class="px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 transition-colors" type="submit" id="save-button">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script de Interação -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('resource-form');
+            const pageTitle = document.getElementById('page-title');
+            const pageMode = document.getElementById('page-mode');
+            const saveButton = document.getElementById('save-button');
+            const messageBox = document.getElementById('message-box');
+            const messageText = document.getElementById('message-text');
+            const logoutButton = document.getElementById('logout-button');
+            
+            // Campos do formulário
+            const idInput = document.getElementById('id_recurso');
+            const tituloInput = document.getElementById('titulo');
+            const categoriaInput = document.getElementById('categoria');
+            const descricaoInput = document.getElementById('descricao');
+            const linkInput = document.getElementById('link_externo');
+
+            let currentRecursoId = null;
+
+            // Lógica do botão de logout
+            logoutButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                // ... (lógica de logout, igual ao outro admin.html) ...
+                window.location.href = './login.html';
+            });
+
+
+            // Verifica se está em modo "Editar" (se tem ID na URL)
+            const urlParams = new URLSearchParams(window.location.search);
+            currentRecursoId = urlParams.get('id');
+
+            if (currentRecursoId) {
+                // *** MODO UPDATE ***
+                pageTitle.textContent = 'Editar Recurso';
+                pageMode.textContent = 'Editar Recurso';
+                saveButton.textContent = 'Salvar Alterações';
+                loadRecursoData(currentRecursoId);
+            } else {
+                // *** MODO CREATE ***
+                pageTitle.textContent = 'Adicionar Novo Recurso';
+                pageMode.textContent = 'Adicionar Recurso';
+                saveButton.textContent = 'Salvar Novo Recurso';
+            }
+
+            // Função para carregar dados do recurso (para UPDATE)
+            async function loadRecursoData(id) {
+                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
+                // Chamar o Servlet para buscar 1 recurso pelo ID
+                // Exemplo: const url = `/zenwork/admin/recursos/get?id=${id}`;
+
+                try {
+                    // Simulação
+                    // const response = await fetch(url);
+                    // const recurso = await response.json();
+                    
+                    const mockRecurso = await new Promise(resolve => setTimeout(() => {
+                        resolve({ id: id, titulo: "Guia de Meditação para Iniciantes", categoria: "Ansiedade", linkExterno: "https://exemplo.com/guia-meditacao", descricao: "Uma prática rápida..." });
+                    }, 500));
+                    // Fim da simulação
+
+                    // Preenche o formulário
+                    idInput.value = mockRecurso.id;
+                    tituloInput.value = mockRecurso.titulo;
+                    categoriaInput.value = mockRecurso.categoria;
+                    descricaoInput.value = mockRecurso.descricao;
+                    linkInput.value = mockRecurso.linkExterno;
+
+                } catch (error) {
+                    console.error('Erro ao carregar recurso:', error);
+                    showMessage('Erro ao carregar dados. Tente novamente.', 'error');
+                }
+            }
+
+            // Função para submeter o formulário (CREATE ou UPDATE)
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                saveButton.disabled = true;
+                saveButton.textContent = 'Salvando...';
+                messageBox.classList.add('hidden');
+
+                const formData = {
+                    id: idInput.value, // Estará vazio no modo CREATE
+                    titulo: tituloInput.value,
+                    categoria: categoriaInput.value,
+                    descricao: descricaoInput.value,
+                    linkExterno: linkInput.value
+                };
+
+                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
+                // Decidir para qual Servlet enviar (Create ou Update)
+                // const isUpdate = !!formData.id;
+                // const url = isUpdate ? '/zenwork/admin/recursos/atualizar' : '/zenwork/admin/recursos/salvar';
+                // const method = isUpdate ? 'PUT' : 'POST'; // Ou POST para ambos, se preferir
+
+                try {
+                    // Simulação
+                    // const response = await fetch(url, {
+                    //     method: method,
+                    //     headers: { 'Content-Type': 'application/json' },
+                    //     body: JSON.stringify(formData)
+                    // });
+                    // const data = await response.json();
+                    
+                    const mockResponse = await new Promise(r => setTimeout(() => r({success: true, message: "Recurso salvo com sucesso!"}), 1000));
+                    // Fim da simulação
+
+                    // if (response.ok && data.success) { // Real
+                    if (mockResponse.success) { // Simulação
+                        showMessage(mockResponse.message, 'success');
+                        // Redireciona de volta para a lista após 2s
+                        setTimeout(() => {
+                            window.location.href = './admin-recursos.html';
+                        }, 2000);
+                    } else {
+                        // throw new Error(data.message || "Erro ao salvar");
+                    }
+                } catch (error) {
+                    showMessage(error.message, 'error');
+                    saveButton.disabled = false;
+                    saveButton.textContent = currentRecursoId ? 'Salvar Alterações' : 'Salvar Novo Recurso';
+                }
+            });
+
+            // Função para mostrar mensagens
+            function showMessage(text, type) {
+                messageText.textContent = text;
+                if (type === 'success') {
+                    messageBox.classList.remove('hidden', 'bg-red-100', 'border-red-400', 'text-red-700');
+                    messageBox.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+                } else {
+                    messageBox.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700');
+                    messageBox.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+                }
+            }
+
+        });
+    </script>
+</body>
+</html>
