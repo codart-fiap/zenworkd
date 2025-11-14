@@ -31,6 +31,7 @@ public class RecursoAjudaDAO {
             stmt.setString(3, recurso.getLinkExterno());
             stmt.setString(4, recurso.getCategoria());
             stmt.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             System.err.println("Erro ao salvar recurso: " + e.getMessage());
             throw new SQLException("Erro ao salvar recurso", e);
