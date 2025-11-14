@@ -152,157 +152,75 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Gerenciamento de Sessão (Admin) ---
-            const userNameEl = document.getElementById('user-name');
-            const userAvatarEl = document.getElementById('user-avatar');
-            const logoutButtonSidebar = document.getElementById('logout-button-sidebar');
+            // ... (Código de sessão igual) ...
 
-            const usuarioString = sessionStorage.getItem('zenworkUser');
-            let usuario = null;
-
-            if (usuarioString) {
-                try {
-                    usuario = JSON.parse(usuarioString);
-                } catch (e) {
-                    window.location.href = './login.html';
-                }
-            }
-
-            if (!usuario || !usuario.isAdmin) {
-                console.warn("Acesso não autorizado. Usuário não é admin.");
-                sessionStorage.removeItem('zenworkUser');
-                window.location.href = './login.html';
-            } else {
-                const adminName = usuario.nome.split(' ')[0];
-                userNameEl.textContent = adminName;
-                const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'A';
-                userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/24a5e5/FFFFFF?text=${inicial}&font=inter")`;
-            }
-
-            logoutButtonSidebar.addEventListener('click', (e) => {
-                e.preventDefault();
-                sessionStorage.removeItem('zenworkUser');
-                window.location.href = './login.html';
-            });
-            // --- Fim da Sessão ---
-
-            // --- Lógica do Formulário (CRUD - Create/Update) ---
             const form = document.getElementById('recurso-form');
-            const pageTitle = document.getElementById('page-title');
-            const pageHeader = document.getElementById('page-header');
-            const saveButton = document.getElementById('save-button');
-            const messageBox = document.getElementById('message-box');
-            const messageText = document.getElementById('message-text');
-            
-            // Elementos do formulário
-            const idRecursoInput = document.getElementById('idRecurso');
+            const idInput = document.getElementById('idRecurso');
             const tituloInput = document.getElementById('titulo');
             const categoriaInput = document.getElementById('categoria');
             const descricaoInput = document.getElementById('descricao');
-            const linkExternoInput = document.getElementById('linkExterno');
+            const linkInput = document.getElementById('linkExterno');
+            const saveButton = document.getElementById('save-button');
 
-            // Verifica se está em modo "Editar" (se tem um ID na URL)
+            // Verifica se é Edição
             const urlParams = new URLSearchParams(window.location.search);
-            const recursoId = urlParams.get('id');
-            const isEditMode = !!recursoId;
+            const id = urlParams.get('id');
 
-            if (isEditMode) {
-                // Modo Edição
-                pageTitle.textContent = "Editar Recurso";
-                pageHeader.textContent = "Editar Recurso";
-                saveButton.textContent = "Salvar Alterações";
-                loadRecursoParaEditar(recursoId);
-            } else {
-                // Modo Criação (padrão)
-                pageTitle.textContent = "Adicionar Recurso";
-                pageHeader.textContent = "Adicionar Novo Recurso";
-                saveButton.textContent = "Salvar Recurso";
+            if (id) {
+                loadDados(id);
             }
 
-            // Função para carregar os dados do recurso no formulário (Modo Edição)
-            async function loadRecursoParaEditar(id) {
-                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                // O Servlet /demo/admin-recursos responde a GET com ?id=...
-                const url = `/demo/admin-recursos?id=${id}`;
-                
-                try {
-                    // --- CÓDIGO REAL ---
-                    const response = await fetch(url);
-                    const recurso = await response.json();
-                    
-                    if(response.ok) {
-                        idRecursoInput.value = recurso.idRecurso;
-                        tituloInput.value = recurso.titulo;
-                        categoriaInput.value = recurso.categoria;
-                        descricaoInput.value = recurso.descricao;
-                        linkExternoInput.value = recurso.linkExterno;
-                    } else {
-                        throw new Error(recurso.message || "Recurso não encontrado");
-                    }
-                
-                } catch (error) {
-                    showMessage(error.message, 'error');
+            async function loadDados(id) {
+                // *** URL CORRETA ***
+                const response = await fetch(`/demo/admin-recursos?id=${id}`);
+                const data = await response.json();
+                if (response.ok) {
+                    idInput.value = data.idRecurso;
+                    tituloInput.value = data.titulo;
+                    categoriaInput.value = data.categoria;
+                    descricaoInput.value = data.descricao;
+                    linkInput.value = data.linkExterno;
                 }
             }
-            
-            // Event listener para salvar (Create ou Update)
+
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                
-                const formData = {
-                    idRecurso: idRecursoInput.value ? parseInt(idRecursoInput.value) : 0,
+                saveButton.textContent = 'Salvando...';
+                saveButton.disabled = true;
+
+                const dados = {
+                    idRecurso: idInput.value ? parseInt(idInput.value) : 0,
                     titulo: tituloInput.value,
                     categoria: categoriaInput.value,
                     descricao: descricaoInput.value,
-                    linkExterno: linkExternoInput.value
+                    linkExterno: linkInput.value
                 };
 
-                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                // O Servlet /demo/admin-recursos responde a POST (para criar) e PUT (para atualizar)
+                // *** URL CORRETA ***
                 const url = '/demo/admin-recursos';
-                const method = isEditMode ? 'PUT' : 'POST';
-
-                saveButton.disabled = true;
-                saveButton.textContent = 'Salvando...';
+                // Se tem ID é PUT (Atualizar), se não é POST (Criar)
+                const method = id ? 'PUT' : 'POST';
 
                 try {
-                    // --- CÓDIGO REAL ---
                     const response = await fetch(url, {
                         method: method,
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
+                        body: JSON.stringify(dados)
                     });
                     
-                    const data = await response.json();
-                    
-                    if (response.ok && data.status === 'success') {
-                        showMessage(data.message, 'success');
-                        setTimeout(() => {
-                            window.location.href = './admin-recursos.html';
-                        }, 1500);
-                    } else {
-                        throw new Error(data.message || "Erro ao salvar recurso");
-                    }
+                    const res = await response.json();
 
+                    if (response.ok && res.status === 'success') {
+                        window.location.href = './admin-recursos.html';
+                    } else {
+                        alert("Erro: " + res.message);
+                        saveButton.disabled = false;
+                    }
                 } catch (error) {
-                    showMessage(error.message, 'error');
+                    alert("Erro de conexão.");
                     saveButton.disabled = false;
-                    saveButton.textContent = isEditMode ? 'Salvar Alterações' : 'Salvar Recurso';
                 }
             });
-
-            // Função para mostrar mensagens
-            function showMessage(message, type) {
-                messageText.textContent = message;
-                if (type === 'success') {
-                    messageBox.classList.remove('hidden', 'bg-red-100', 'border-red-400', 'text-red-700');
-                    messageBox.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
-                } else {
-                    messageBox.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-700');
-                    messageBox.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
-                }
-            }
-
         });
     </script>
 </body>

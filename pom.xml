@@ -11,10 +11,9 @@
   <name>ZenWork Demo Webapp</name>
   <url>http://maven.apache.org</url>
 
-  <properties>
-    <!-- Alinhado com seu JDK 21 -->
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
+ <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 

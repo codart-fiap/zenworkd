@@ -135,134 +135,166 @@
         </main>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Gerenciamento de Sessão (Admin) ---
-            const userNameEl = document.getElementById('user-name');
-            const userAvatarEl = document.getElementById('user-avatar');
-            const logoutButtonSidebar = document.getElementById('logout-button-sidebar');
+   <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                // --- 1. Gerenciamento de Sessão Seguro ---
+                const userNameEl = document.getElementById('user-name');
+                const userAvatarEl = document.getElementById('user-avatar');
+                const logoutButtonSidebar = document.getElementById('logout-button-sidebar');
 
-            const usuarioString = sessionStorage.getItem('zenworkUser');
-            let usuario = null;
+                let usuario = null;
 
-            if (usuarioString) {
                 try {
-                    usuario = JSON.parse(usuarioString);
+                    const usuarioString = sessionStorage.getItem('zenworkUser');
+                    if (usuarioString) {
+                        usuario = JSON.parse(usuarioString);
+                    }
                 } catch (e) {
+                    console.error("Erro ao ler sessão:", e);
+                    // Se a sessão estiver corrompida, força logout
+                    sessionStorage.removeItem('zenworkUser');
                     window.location.href = './login.html';
-                }
-            }
-
-            if (!usuario || !usuario.isAdmin) {
-                console.warn("Acesso não autorizado. Usuário não é admin.");
-                sessionStorage.removeItem('zenworkUser');
-                window.location.href = './login.html';
-            } else {
-                const adminName = usuario.nome.split(' ')[0];
-                userNameEl.textContent = adminName;
-                const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'A';
-                userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/24a5e5/FFFFFF?text=${inicial}&font=inter")`;
-            }
-
-            logoutButtonSidebar.addEventListener('click', (e) => {
-                e.preventDefault();
-                sessionStorage.removeItem('zenworkUser');
-                window.location.href = './login.html';
-            });
-            // --- Fim da Sessão ---
-
-            // --- Lógica do CRUD (Read) ---
-            const tableBody = document.getElementById('recursos-table-body');
-            const tableMessage = document.getElementById('table-message');
-
-            // Função para criar uma linha da tabela
-            function createTableRow(recurso) {
-                return `
-                    <tr class="hover:bg-primary/5 dark:hover:bg-primary/10" data-id="${recurso.idRecurso}">
-                        <td class="px-6 py-4 text-sm font-normal text-text-main-light dark:text-text-main-dark">${recurso.titulo}</td>
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary dark:text-primary">${recurso.categoria}</span>
-                        </td>
-                        <td class="px-6 py-4 text-sm font-medium">
-                            <div class="flex items-center justify-end gap-2">
-                                <a href="./admin-form.html?id=${recurso.idRecurso}" class="p-2 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" title="Editar">
-                                    <span class="material-symbols-outlined text-base">edit</span>
-                                </a>
-                                <button onclick="deleteRecurso(${recurso.idRecurso})" class="p-2 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-500 transition-colors" title="Deletar">
-                                    <span class="material-symbols-outlined text-base">delete</span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }
-
-            // Função para carregar todos os recursos
-            async function loadRecursos() {
-                tableMessage.classList.remove('hidden');
-                tableMessage.textContent = 'Carregando recursos...';
-                
-                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                // O Servlet /demo/admin-recursos responde a GET
-                const url = '/demo/admin-recursos'; 
-
-                try {
-                    // --- CÓDIGO REAL ---
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || "Erro ao buscar dados");
-                    }
-                    const data = await response.json();
-                   
-                    tableBody.innerHTML = ''; // Limpa a tabela
-                    if (data && data.length > 0) {
-                        tableMessage.classList.add('hidden');
-                        data.forEach(rec => {
-                            tableBody.innerHTML += createTableRow(rec);
-                        });
-                    } else {
-                        tableMessage.textContent = 'Nenhum recurso encontrado. Clique em "Adicionar Novo Recurso" para começar.';
-                    }
-
-                } catch (error) {
-                    console.error("Erro ao carregar recursos:", error);
-                    tableMessage.textContent = 'Erro ao carregar recursos: ' + error.message;
-                    tableMessage.classList.add('text-red-500');
-                }
-            }
-            
-            // Função Global para Deletar (CRUD - Delete)
-            window.deleteRecurso = async (id) => {
-                if (!confirm(`Tem certeza que deseja excluir o recurso ID ${id}?`)) {
                     return;
                 }
-                
-                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                // O Servlet /demo/admin-recursos responde a DELETE
-                const url = `/demo/admin-recursos?id=${id}`;
-                
-                try {
-                    // --- CÓDIGO REAL ---
-                    const response = await fetch(url, { method: 'DELETE' });
-                    const data = await response.json();
 
-                    if (response.ok && data.status === 'success') {
-                        // Remove a linha da tabela na interface
-                         document.querySelector(`tr[data-id="${id}"]`).remove();
-                    } else {
-                        alert("Erro ao deletar recurso: " + data.message);
-                    }
-                
-                } catch (error) {
-                    console.error("Erro ao deletar:", error);
-                    alert("Erro de conexão ao tentar deletar.");
+                // Verifica se é admin
+                if (!usuario || !usuario.isAdmin) {
+                    console.warn("Acesso não autorizado ou sessão expirada.");
+                    sessionStorage.removeItem('zenworkUser');
+                    window.location.href = './login.html';
+                    return; // Para a execução aqui
                 }
-            }
 
-            // Carrega os dados ao iniciar a página
-            loadRecursos();
-        });
+                // Preenche dados da Sidebar
+                if (userNameEl && usuario.nome) {
+                    const adminName = usuario.nome.split(' ')[0];
+                    userNameEl.textContent = adminName;
+                    const inicial = adminName.charAt(0).toUpperCase();
+                    if(userAvatarEl) {
+                        userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/24a5e5/FFFFFF?text=${inicial}&font=inter")`;
+                    }
+                }
+
+                if (logoutButtonSidebar) {
+                    logoutButtonSidebar.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        sessionStorage.removeItem('zenworkUser');
+                        window.location.href = './login.html';
+                    });
+                }
+                // --- Fim da Sessão ---
+
+                // --- 2. Lógica da Tabela (CRUD - Read & Delete) ---
+                const tableBody = document.getElementById('recursos-table-body');
+                const tableMessage = document.getElementById('table-message');
+
+                // Função para criar linha da tabela
+                function createTableRow(recurso) {
+                    return `
+                        <tr class="hover:bg-primary/5 dark:hover:bg-primary/10" data-id="${recurso.idRecurso}">
+                            <td class="px-6 py-4 text-sm font-normal text-text-main-light dark:text-text-main-dark">${recurso.titulo}</td>
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary dark:text-primary">${recurso.categoria}</span>
+                            </td>
+                            <td class="px-6 py-4 text-sm font-medium">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="./admin-form.html?id=${recurso.idRecurso}" class="p-2 text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined text-base">edit</span>
+                                    </a>
+                                    <button onclick="deletarRecurso(${recurso.idRecurso})" class="p-2 text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors">
+                                        <span class="material-symbols-outlined text-base">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+
+                // Função para carregar recursos
+                async function loadRecursos() {
+                    if(tableMessage) {
+                        tableMessage.classList.remove('hidden');
+                        tableMessage.textContent = 'Carregando recursos...';
+                        tableMessage.className = "text-center py-10 text-text-secondary-light dark:text-text-secondary-dark"; // Reset de cor
+                    }
+
+                    const url = '/demo/admin-recursos'; 
+
+                    try {
+                        const response = await fetch(url);
+                        
+                        // Se o servidor retornou erro (ex: 403 ou 500)
+                        if (!response.ok) {
+                            // Se for 403 (Proibido), a sessão no servidor caiu
+                            if (response.status === 403) {
+                                alert("Sua sessão expirou. Por favor, faça login novamente.");
+                                sessionStorage.removeItem('zenworkUser');
+                                window.location.href = './login.html';
+                                return;
+                            }
+                            throw new Error(`Erro do servidor: ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        
+                        if(tableBody) tableBody.innerHTML = '';
+                        
+                        if (data && data.length > 0) {
+                            if(tableMessage) tableMessage.classList.add('hidden');
+                            data.forEach(rec => {
+                                if(tableBody) tableBody.innerHTML += createTableRow(rec);
+                            });
+                        } else {
+                            if(tableMessage) {
+                                tableMessage.textContent = 'Nenhum recurso encontrado. Clique em "Adicionar Novo Recurso".';
+                                tableMessage.classList.remove('hidden');
+                            }
+                        }
+
+                    } catch (error) {
+                        console.error("Falha ao carregar:", error);
+                        if(tableMessage) {
+                            tableMessage.textContent = 'Não foi possível carregar os recursos. Verifique se o servidor está rodando.';
+                            tableMessage.classList.remove('hidden');
+                            tableMessage.classList.add('text-red-500');
+                        }
+                    }
+                }
+
+                // Torna a função de deletar global para o onclick do HTML funcionar
+                window.deletarRecurso = async (id) => {
+                    if (!confirm("Tem certeza que deseja remover este recurso?")) return;
+
+                    const url = `/demo/admin-recursos?id=${id}`;
+
+                    try {
+                        const response = await fetch(url, { method: 'DELETE' });
+                        
+                        if (!response.ok) {
+                            if (response.status === 403) {
+                                alert("Sessão expirada.");
+                                window.location.href = './login.html';
+                                return;
+                            }
+                            throw new Error("Erro ao deletar");
+                        }
+
+                        const data = await response.json();
+
+                        if (data.status === 'success') {
+                            const row = document.querySelector(`tr[data-id="${id}"]`);
+                            if(row) row.remove();
+                        } else {
+                            alert("Erro: " + data.message);
+                        }
+                    } catch (error) {
+                        alert("Erro de conexão ao tentar deletar.");
+                    }
+                }
+
+                // Inicia o carregamento
+                loadRecursos();
+            });
     </script>
 </body>
 </html>
