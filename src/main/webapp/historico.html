@@ -141,156 +141,162 @@
       *** SCRIPT UNIFICADO ***
     -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Elementos Globais
-            const userNameEl = document.getElementById('user-name');
-            const userAvatarEl = document.getElementById('user-avatar');
-            const adminLinkContainer = document.getElementById('admin-link-container');
-            const logoutButton = document.getElementById('logout-button');
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Elementos Globais ---
+        const userNameEl = document.getElementById('user-name');
+        const userAvatarEl = document.getElementById('user-avatar');
+        const adminLinkContainer = document.getElementById('admin-link-container');
+        const logoutButton = document.getElementById('logout-button');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-            // Elementos Específicos da Página
-            const historyListContainer = document.getElementById('history-list-container');
-            const historyMessage = document.getElementById('history-message');
-            const historyIcon = document.getElementById('history-icon');
-            const historyText = document.getElementById('history-text');
-            
-            // --- Gerenciamento de Sessão (Unificado) ---
-            const usuarioString = sessionStorage.getItem('zenworkUser');
-            let usuario = null;
+        // --- Elementos Específicos da Página ---
+        const historyListContainer = document.getElementById('history-list-container');
+        const historyMessage = document.getElementById('history-message');
+        const historyIcon = document.getElementById('history-icon');
+        const historyText = document.getElementById('history-text');
+        
+        // --- Gerenciamento de Sessão (Unificado) ---
+        const usuarioString = sessionStorage.getItem('zenworkUser');
+        let usuario = null;
 
-            if (usuarioString) {
+        if (usuarioString) {
+            try {
                 usuario = JSON.parse(usuarioString);
+            } catch (e) {
+                console.error("Erro ao ler dados da sessão:", e);
+                window.location.href = './login.html';
+            }
+        }
+
+        if (usuario && usuario.idUsuario) {
+            userNameEl.textContent = `Olá, ${usuario.nome}!`;
+            const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'Z';
+            userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/48B2A9/FFFFFF?text=${inicial}&font=inter")`;
+
+            if (usuario.isAdmin) {
+                adminLinkContainer.innerHTML = `
+                    <a class="flex items-center gap-3 rounded-lg px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" href="./admin-dashboard.html">
+                        <span class="material-symbols-outlined !text-2xl">admin_panel_settings</span>
+                        <span class="font-bold">Painel Admin</span>
+                    </a>`;
+            }
+        } else {
+             console.warn("Nenhum usuário logado, redirecionando para login.");
+            window.location.href = './login.html';
+        }
+
+        logoutButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem('zenworkUser');
+            // fetch('/demo/logout', { method: 'POST' })
+            // .then(() => window.location.href = './login.html');
+            console.log('Logout...');
+            window.location.href = './login.html';
+        });
+
+        // Lógica do Menu Mobile
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+        }
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.add('hidden');
+            });
+        }
+        // --- Fim do Gerenciamento de Sessão ---
+
+
+        // --- Lógica Específica desta Página (Histórico) ---
+
+        if (historyListContainer) { 
+
+            const emotionMap = {
+                "Feliz": { icon: "sentiment_very_satisfied", colorClass: "happy-bg" },
+                "Neutro": { icon: "sentiment_neutral", colorClass: "neutral-bg" },
+                "Cansado": { icon: "sentiment_dissatisfied", colorClass: "tired-bg" },
+                "Estressado": { icon: "sentiment_stressed", colorClass: "stressed-bg" },
+            };
+
+            function createHistoryItem(registro) {
+                const emotionData = emotionMap[registro.emocaoSelecionada] || emotionMap["Neutro"];
+                const bgColor = `${emotionData.colorClass}`; 
+                const textColor = `text-text-main-light dark:text-text-main-dark`;
+                
+                // O backend (HistoricoServlet) envia a data como uma string ISO (ex: "2025-11-14T10:30:00Z")
+                const dataFormatada = new Date(registro.dataRegistro).toLocaleString('pt-BR', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                return `
+                    <div class="flex gap-4 bg-card-light dark:bg-card-dark p-4 rounded-xl border border-border-light dark:border-border-dark items-start hover:shadow-sm transition-shadow duration-200">
+                        <div class="flex items-center justify-center rounded-lg ${bgColor} ${textColor} shrink-0 size-12">
+                            <span class="material-symbols-outlined text-2xl">${emotionData.icon}</span>
+                        </div>
+                        <div class="flex flex-1 flex-col justify-center">
+                            <p class="text-text-main-light dark:text-text-main-dark text-base font-medium leading-normal">${registro.emocaoSelecionada}</p>
+                            ${registro.comentario ? `
+                                <p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal leading-normal mt-1">
+                                    ${registro.comentario}
+                                </p>
+                            ` : ''}
+                            <p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal leading-normal mt-2">${dataFormatada}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            async function loadHistory() {
+                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
+                const url = `/demo/historico`; // O Servlet pega o ID da sessão
+
+                try {
+                    // --- CÓDIGO REAL ---
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                         const errorData = await response.json();
+                         throw new Error(errorData.message || `Erro ${response.status}`);
+                    }
+                    const historico = await response.json(); // Espera-se um List<RegistroBemEstar>
+
+                    if (historico && historico.length > 0) {
+                        historyMessage.classList.add('hidden'); 
+                        historyListContainer.innerHTML = ''; 
+                        // O DAO já ordena por DESC, então não precisamos ordenar aqui
+                        historico.forEach(registro => {
+                            historyListContainer.innerHTML += createHistoryItem(registro);
+                        });
+                    } else {
+                        // Mostra o estado vazio
+                        historyIcon.textContent = 'edit_note';
+                        historyText.innerHTML = `Nenhum registro encontrado. <br> <a href="./dashboard.html" class="text-primary font-medium hover:underline">Faça seu primeiro check-in!</a>`;
+                    }
+                    // --- FIM DO CÓDIGO REAL ---
+
+                } catch (error) {
+                    console.error("Erro ao carregar histórico:", error);
+                    historyIcon.textContent = 'error';
+                    historyText.textContent = 'Erro ao carregar seu histórico. Tente novamente mais tarde.';
+                    historyMessage.classList.add('text-red-500');
+                }
             }
 
             if (usuario) {
-                userNameEl.textContent = `Olá, ${usuario.nome}!`;
-                const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'Z';
-                userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/48B2A9/FFFFFF?text=${inicial}&font=inter")`;
-
-                if (usuario.isAdmin) {
-                    adminLinkContainer.innerHTML = `
-                        <a class="flex items-center gap-3 rounded-lg px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" href="./admin-recursos.html">
-                            <span class="material-symbols-outlined !text-2xl">admin_panel_settings</span>
-                            <span class="font-bold">Painel Admin</span>
-                        </a>`;
-                }
-            } else {
-                window.location.href = './login.html';
+                loadHistory();
             }
-
-            logoutButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                sessionStorage.removeItem('zenworkUser');
-                // fetch('/demo/logout', { method: 'POST' })
-                // .then(() => window.location.href = './login.html');
-                console.log('Logout...');
-                window.location.href = './login.html';
-            });
-            // --- Fim do Gerenciamento de Sessão ---
-
-
-            // --- Lógica Específica desta Página (Histórico) ---
-
-            if (historyListContainer) { // Garante que este código só rode na página de histórico
-
-                // Mapeamento de emoções para ícones e cores
-                const emotionMap = {
-                    "Feliz": { icon: "sentiment_very_satisfied", color: "happy" },
-                    "Neutro": { icon: "sentiment_neutral", color: "neutral" },
-                    "Cansado": { icon: "sentiment_dissatisfied", color: "tired" },
-                    "Estressado": { icon: "sentiment_stressed", color: "stressed" },
-                };
-
-                // Função para criar o HTML de um item do histórico
-                function createHistoryItem(registro) {
-                    const emotionData = emotionMap[registro.emocaoSelecionada] || emotionMap["Neutro"];
-                    const bgColor = `bg-${emotionData.color} dark:bg-${emotionData.color}-dark`; // Ex: "bg-happy dark:bg-happy-dark"
-                    const textColor = `text-text-main-light dark:text-text-main-dark`; // Ex: "text-yellow-600 dark:text-yellow-400"
-                    
-                    // Formata a data
-                    const dataFormatada = new Date(registro.dataRegistro).toLocaleString('pt-BR', {
-                        day: '2-digit',
-                        month: 'long',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-
-                    return `
-                        <div class="flex gap-4 bg-card-light dark:bg-card-dark p-4 rounded-xl border border-border-light dark:border-border-dark items-start hover:shadow-sm transition-shadow duration-200">
-                            <div class="flex items-center justify-center rounded-lg ${bgColor} ${textColor} shrink-0 size-12">
-                                <span class="material-symbols-outlined text-2xl">${emotionData.icon}</span>
-                            </div>
-                            <div class="flex flex-1 flex-col justify-center">
-                                <p class="text-text-main-light dark:text-text-main-dark text-base font-medium leading-normal">${registro.emocaoSelecionada}</p>
-                                ${registro.comentario ? `
-                                    <p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal leading-normal mt-1">
-                                        ${registro.comentario}
-                                    </p>
-                                ` : ''}
-                                <p class="text-text-secondary-light dark:text-text-secondary-dark text-sm font-normal leading-normal mt-2">${dataFormatada}</p>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                // Função para carregar o histórico
-                async function loadHistory() {
-                    // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                    const url = `/demo/historico?idUsuario=${usuario.idUsuario}`;
-
-                    try {
-                        const response = await fetch(url);
-                        if (!response.ok) {
-                            throw new Error(`O backend ainda não responde em ${url}`);
-                        }
-                        const historico = await response.json();
-
-
-                        if (historico && historico.length > 0) {
-                            historyMessage.classList.add('hidden'); // Oculta a mensagem
-                            historyListContainer.innerHTML = ''; // Limpa a lista
-                            // Ordena do mais novo para o mais antigo
-                            historico.sort((a, b) => new Date(b.dataRegistro) - new Date(a.dataRegistro));
-                            historico.forEach(registro => {
-                                historyListContainer.innerHTML += createHistoryItem(registro);
-                            });
-                        } else {
-                            // Mostra o estado vazio
-                            historyIcon.textContent = 'edit_note';
-                            historyText.innerHTML = `Nenhum registro encontrado. <br> <a href="./dashboard.html" class="text-primary font-medium hover:underline">Faça seu primeiro check-in!</a>`;
-                        }
-
-                    } catch (error) {
-                         // *** SIMULAÇÃO DE DADOS ***
-                        // Remova este bloco 'catch' e descomente o 'try' quando o backend estiver pronto
-                        console.warn(error.message, "Usando dados de simulação.");
-                        historyMessage.classList.add('hidden');
-                        historyListContainer.innerHTML = ''; 
-                        const mockHistorico = [
-                            { dataRegistro: "2025-11-12T10:30:00", emocaoSelecionada: "Estressado", comentario: "Prazo da Global Solution está apertado." },
-                            { dataRegistro: "2025-11-11T09:15:00", emocaoSelecionada: "Cansado", comentario: "Muitas reuniões." },
-                            { dataRegistro: "2025-11-10T09:00:00", emocaoSelecionada: "Feliz", comentario: "Recebi um feedback positivo." }
-                        ];
-                        mockHistorico.forEach(registro => {
-                            historyListContainer.innerHTML += createHistoryItem(registro);
-                        });
-                        
-                        /*
-                        // Este é o código de erro real:
-                        console.error("Erro ao carregar histórico:", error);
-                        historyIcon.textContent = 'error';
-                        historyText.textContent = 'Erro ao carregar seu histórico. Tente novamente mais tarde.';
-                        historyMessage.classList.add('text-red-500');
-                        */
-                    }
-                }
-
-                // Carrega o histórico ao iniciar a página
-                if (usuario) {
-                    loadHistory();
-                }
-            }
-        });
-    </script>
+        }
+    });
+</script>
+</body>
+</html>
 </body>
 </html>

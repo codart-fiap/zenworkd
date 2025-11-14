@@ -157,131 +157,142 @@
     <!-- 
       *** SCRIPT UNIFICADO ***
     -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Elementos Globais
-            const userNameEl = document.getElementById('user-name');
-            const userAvatarEl = document.getElementById('user-avatar');
-            const adminLinkContainer = document.getElementById('admin-link-container');
-            const logoutButton = document.getElementById('logout-button');
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Elementos Globais ---
+        const userNameEl = document.getElementById('user-name');
+        const userAvatarEl = document.getElementById('user-avatar');
+        const adminLinkContainer = document.getElementById('admin-link-container');
+        const logoutButton = document.getElementById('logout-button');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-            // Elementos Específicos da Página
-            const resourceGrid = document.getElementById('resource-grid');
-            const gridMessage = document.getElementById('grid-message');
-            
-            // --- Gerenciamento de Sessão (Unificado) ---
-            const usuarioString = sessionStorage.getItem('zenworkUser');
-            let usuario = null;
+        // --- Elementos Específicos da Página ---
+        const resourceGrid = document.getElementById('resource-grid');
+        const gridMessage = document.getElementById('grid-message');
+        
+        // --- Gerenciamento de Sessão (Unificado) ---
+        const usuarioString = sessionStorage.getItem('zenworkUser');
+        let usuario = null;
 
-            if (usuarioString) {
+        if (usuarioString) {
+            try {
                 usuario = JSON.parse(usuarioString);
-            }
-
-            if (usuario) {
-                userNameEl.textContent = `Olá, ${usuario.nome}!`;
-                const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'Z';
-                userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/48B2A9/FFFFFF?text=${inicial}&font=inter")`;
-
-                if (usuario.isAdmin) {
-                    adminLinkContainer.innerHTML = `
-                        <a class="flex items-center gap-3 rounded-lg px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" href="./admin-recursos.html">
-                            <span class="material-symbols-outlined !text-2xl">admin_panel_settings</span>
-                            <span class="font-bold">Painel Admin</span>
-                        </a>`;
-                }
-            } else {
+            } catch (e) {
+                console.error("Erro ao ler dados da sessão:", e);
                 window.location.href = './login.html';
             }
+        }
 
-            logoutButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                sessionStorage.removeItem('zenworkUser');
-                // fetch('/demo/logout', { method: 'POST' })
-                // .then(() => window.location.href = './login.html');
-                console.log('Logout...');
-                window.location.href = './login.html';
+        if (usuario && usuario.idUsuario) {
+            userNameEl.textContent = `Olá, ${usuario.nome}!`;
+            const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'Z';
+            userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/48B2A9/FFFFFF?text=${inicial}&font=inter")`;
+
+            if (usuario.isAdmin) {
+                adminLinkContainer.innerHTML = `
+                    <a class="flex items-center gap-3 rounded-lg px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors" href="./admin-dashboard.html">
+                        <span class="material-symbols-outlined !text-2xl">admin_panel_settings</span>
+                        <span class="font-bold">Painel Admin</span>
+                    </a>`;
+            }
+        } else {
+            console.warn("Nenhum usuário logado, redirecionando para login.");
+            window.location.href = './login.html';
+        }
+
+        logoutButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem('zenworkUser');
+            // fetch('/demo/logout', { method: 'POST' })
+            // .then(() => window.location.href = './login.html');
+            console.log('Logout...');
+            window.location.href = './login.html';
+        });
+        
+        // Lógica do Menu Mobile
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('hidden');
             });
-            // --- Fim do Gerenciamento de Sessão ---
+        }
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.add('hidden');
+            });
+        }
+        // --- Fim do Gerenciamento de Sessão ---
 
 
-            // --- Lógica Específica desta Página (Recursos) ---
+        // --- Lógica Específica desta Página (Recursos) ---
 
-            if(resourceGrid) { // Garante que este código só rode na página de recursos
-                
-                // Função para criar o HTML de um card de recurso
-                function createResourceCard(recurso) {
-                    const tags = {
-                        "Artigo": "bg-orange-500/20 text-orange-500",
-                        "Vídeo": "bg-blue-500/20 text-blue-500",
-                        "Contato": "bg-red-500/20 text-red-500",
-                        "Padrão": "bg-gray-500/20 text-gray-500"
-                    };
-                    const tagColor = tags[recurso.categoria] || tags["Padrão"];
+        if(resourceGrid) { 
+            
+            function createResourceCard(recurso) {
+                const tags = {
+                    "Artigo": "bg-orange-500/20 text-orange-500",
+                    "Vídeo": "bg-blue-500/20 text-blue-500",
+                    "Contato": "bg-red-500/20 text-red-500",
+                    "Mindfulness": "bg-primary/20 text-primary",
+                    "Ansiedade": "bg-blue-500/20 text-blue-500",
+                    "Exercício": "bg-green-500/20 text-green-500",
+                    "Padrão": "bg-gray-500/20 text-gray-500"
+                };
+                const tagColor = tags[recurso.categoria] || tags["Padrão"];
 
-                    return `
-                        <div class="flex flex-col bg-card-light dark:bg-card-dark rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)] overflow-hidden">
-                            <div class="p-6 flex flex-col items-start gap-3 flex-grow">
-                                <span class="text-xs font-medium px-3 py-1 rounded-full ${tagColor} dark:text-opacity-90">${recurso.categoria}</span>
-                                <h3 class="text-text-main-light dark:text-text-main-dark text-lg font-bold leading-tight">${recurso.titulo}</h3>
-                                <p class="text-text-secondary-light dark:text-text-secondary-dark text-sm leading-relaxed flex-grow">${recurso.descricao}</p>
-                                <a href="${recurso.linkExterno}" target="_blank" rel="noopener noreferrer" class="mt-2 w-full flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark text-text-main-light dark:text-text-main-dark text-sm font-medium leading-normal hover:bg-border-light dark:hover:bg-border-dark/40 transition-colors">
-                                    Acessar Recurso
-                                </a>
-                            </div>
+                return `
+                    <div class="flex flex-col bg-card-light dark:bg-card-dark rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)] overflow-hidden">
+                        <div class="p-6 flex flex-col items-start gap-3 flex-grow">
+                            <span class="text-xs font-medium px-3 py-1 rounded-full ${tagColor} dark:text-opacity-90">${recurso.categoria}</span>
+                            <h3 class="text-text-main-light dark:text-text-main-dark text-lg font-bold leading-tight">${recurso.titulo}</h3>
+                            <p class="text-text-secondary-light dark:text-text-secondary-dark text-sm leading-relaxed flex-grow">${recurso.descricao}</p>
+                            <a href="${recurso.linkExterno}" target="_blank" rel="noopener noreferrer" class="mt-2 w-full flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark text-text-main-light dark:text-text-main-dark text-sm font-medium leading-normal hover:bg-border-light dark:hover:bg-border-dark/40 transition-colors">
+                                Acessar Recurso
+                            </a>
                         </div>
-                    `;
-                }
+                    </div>
+                `;
+            }
 
-                // Função para carregar os recursos
-                async function loadResources() {
-                    // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                    const url = '/demo/recursos'; // URL correta
-                    
-                    try {
-                        const response = await fetch(url);
-                        if (!response.ok) {
-                            throw new Error(`O backend ainda não responde em ${url}`);
-                        }
-                        const recursos = await response.json();
+            async function loadResources() {
+                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
+                const url = '/demo/recursos'; // URL do RecursosServlet
+                
+                try {
+                    // --- CÓDIGO REAL ---
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || `Erro ${response.status}`);
+                    }
+                    const recursos = await response.json(); // Espera uma List<RecursoAjuda>
 
-                        if (recursos && recursos.length > 0) {
-                            gridMessage.classList.add('hidden'); // Oculta a mensagem de "carregando"
-                            resourceGrid.innerHTML = ''; // Limpa a grade
-                            recursos.forEach(recurso => {
-                                resourceGrid.innerHTML += createResourceCard(recurso);
-                            });
-                        } else {
-                            gridMessage.textContent = 'Nenhum recurso encontrado.';
-                        }
-
-                    } catch (error) {
-                        // *** SIMULAÇÃO DE DADOS ***
-                        // Remova este bloco 'catch' e descomente o 'try' quando o backend estiver pronto
-                        console.warn(error.message, "Usando dados de simulação.");
-                        gridMessage.classList.add('hidden');
-                        resourceGrid.innerHTML = ''; // Limpa a grade
-                        const mockRecursos = [
-                            { titulo: "5 técnicas para gerenciar o estresse", descricao: "Estratégias práticas para identificar e gerenciar o estresse.", linkExterno: "#", categoria: "Artigo" },
-                            { titulo: "Meditação guiada de 5 minutos", descricao: "Uma prática rápida para acalmar a mente e focar no presente.", linkExterno: "#", categoria: "Vídeo" },
-                            { titulo: "Alongamentos para Aliviar a Tensão", descricao: "Uma série de alongamentos para fazer na sua mesa.", linkExterno: "#", categoria: "Exercício" }
-                        ];
-                        mockRecursos.forEach(recurso => {
+                    if (recursos && recursos.length > 0) {
+                        gridMessage.classList.add('hidden'); 
+                        resourceGrid.innerHTML = ''; 
+                        recursos.forEach(recurso => {
                             resourceGrid.innerHTML += createResourceCard(recurso);
                         });
-                        
-                        /*
-                        // Este é o código de erro real:
-                        console.error("Erro ao carregar recursos:", error);
-                        gridMessage.textContent = 'Erro ao carregar recursos. Tente novamente mais tarde.';
-                        gridMessage.classList.add('text-red-500');
-                        */
+                    } else {
+                        gridMessage.textContent = 'Nenhum recurso encontrado.';
                     }
-                }
+                    // --- FIM DO CÓDIGO REAL ---
 
-                // Carrega os recursos ao iniciar a página
-                loadResources();
+                } catch (error) {
+                    console.error("Erro ao carregar recursos:", error);
+                    gridMessage.textContent = 'Erro ao carregar recursos. Tente novamente mais tarde.';
+                    gridMessage.classList.add('text-red-500');
+                }
             }
-        });
-    </script>
+
+            loadResources();
+        }
+    });
+</script>
+</body>
+</html>
 </body>
 </html>

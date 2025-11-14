@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <!-- Configuração do Tailwind (IDÊNTICA à do dashboard) -->
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -44,7 +43,6 @@
 <body
     class="font-display bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark">
     <div class="relative flex min-h-screen w-full">
-        <!-- Barra Lateral do Admin (IDÊNTICA à do dashboard) -->
         <aside
             class="flex w-64 flex-col border-r border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark p-4 sticky top-0 h-screen">
             <div class="flex items-center gap-3 p-3">
@@ -63,14 +61,12 @@
                         <span class="material-symbols-outlined">dashboard</span>
                         <p class="text-sm font-medium leading-normal">Dashboard</p>
                     </a>
-                    <!-- Link do Gerenciamento está ATIVO -->
                     <a class="flex items-center gap-3 rounded-lg bg-primary/20 dark:bg-primary/30 px-3 py-2 text-primary dark:text-white"
                         href="./admin-recursos.html">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">folder</span>
                         <p class="text-sm font-medium leading-normal">Gerenciar Recursos</p>
                     </a>
                 </div>
-                <!-- Perfil do Usuário na Sidebar -->
                 <div class="flex flex-col gap-4 border-t border-border-light dark:border-border-dark pt-4">
                     <div class="flex gap-3 items-center">
                         <div id="user-avatar" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
@@ -79,7 +75,7 @@
                         </div>
                         <div class="flex flex-col">
                             <h1 id="user-name" class="text-base font-medium leading-normal text-text-main-light dark:text-text-main-dark">Admin...</h1>
-                            <p class="text-sm font-normal leading-normal text-text-secondary-light dark:text-text-secondary-dark">Admin</JSON.parse(usuarioString);
+                            <p class="text-sm font-normal leading-normal text-text-secondary-light dark:text-text-secondary-dark">Admin</p>
                         </div>
                     </div>
                      <button id="logout-button-sidebar"
@@ -91,16 +87,13 @@
             </div>
         </aside>
 
-        <!-- Conteúdo Principal -->
         <main class="flex-1 p-8">
             <div class="max-w-7xl mx-auto flex flex-col gap-6">
-                <!-- Cabeçalho -->
                 <header class="flex flex-wrap justify-between items-start gap-4">
                     <div class="flex flex-col gap-2">
                         <h1 class="text-text-main-light dark:text-text-main-dark text-3xl font-black tracking-tight">Gerenciamento da Biblioteca</h1>
                         <p class="text-text-secondary-light dark:text-text-secondary-dark text-base font-normal">Adicione, edite ou remova artigos, vídeos e outros materiais de apoio.</p>
                     </div>
-                    <!-- Botão para ir para o formulário de ADICIONAR -->
                     <a href="./admin-form.html"
                         class="flex items-center justify-center gap-2 min-w-[84px] cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-opacity-90 transition-colors">
                         <span class="material-symbols-outlined">add_circle</span>
@@ -108,7 +101,6 @@
                     </a>
                 </header>
                 
-                <!-- Barra de Busca -->
                 <div class="flex justify-between items-center gap-4 bg-card-light dark:bg-card-dark p-3 rounded-xl border border-border-light dark:border-border-dark">
                     <div class="relative w-full max-w-sm">
                         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -120,12 +112,10 @@
                     </div>
                 </div>
 
-                <!-- Mensagem de Loading/Erro/Vazio -->
                 <div id="table-message" class="text-center py-10">
                     <p class="text-text-secondary-light dark:text-text-secondary-dark">Carregando recursos...</p>
                 </div>
                 
-                <!-- Tabela de Recursos (CRUD - Read) -->
                 <div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
@@ -136,10 +126,8 @@
                                     <th class="px-6 py-4 text-text-main-light dark:text-text-main-dark text-sm font-medium text-right">Ações</th>
                                 </tr>
                             </thead>
-                            <!-- Corpo da tabela será preenchido pelo JS -->
                             <tbody class="divide-y divide-border-light dark:divide-border-dark" id="recursos-table-body">
-                                <!-- As linhas serão inseridas aqui pelo JavaScript -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -147,7 +135,6 @@
         </main>
     </div>
 
-    <!-- JavaScript da Página -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Gerenciamento de Sessão (Admin) ---
@@ -198,11 +185,9 @@
                         </td>
                         <td class="px-6 py-4 text-sm font-medium">
                             <div class="flex items-center justify-end gap-2">
-                                <!-- Botão Editar: Redireciona para admin-form.html com o ID -->
                                 <a href="./admin-form.html?id=${recurso.idRecurso}" class="p-2 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors" title="Editar">
                                     <span class="material-symbols-outlined text-base">edit</span>
                                 </a>
-                                <!-- Botão Deletar: Chama a função deleteRecurso() -->
                                 <button onclick="deleteRecurso(${recurso.idRecurso})" class="p-2 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-500 transition-colors" title="Deletar">
                                     <span class="material-symbols-outlined text-base">delete</span>
                                 </button>
@@ -218,27 +203,17 @@
                 tableMessage.textContent = 'Carregando recursos...';
                 
                 // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                // Você precisará criar um Servlet (ex: /demo/admin/recursos) que responde a GET
-                const url = '/demo/admin-recursos'; // Mapeamento do seu futuro Servlet
+                // O Servlet /demo/admin-recursos responde a GET
+                const url = '/demo/admin-recursos'; 
 
                 try {
-                    // ** SIMULAÇÃO DE DADOS (Enquanto o backend não está pronto) **
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    const mockRecursos = [
-                        { idRecurso: 1, titulo: "Guia de Meditação para Iniciantes", categoria: "Ansiedade", linkExterno: "#" },
-                        { idRecurso: 2, titulo: "Workshop sobre Gestão de Estresse", categoria: "Liderança", linkExterno: "#" },
-                        { idRecurso: 3, titulo: "Técnicas de Comunicação Não-Violenta", categoria: "Comunicação", linkExterno: "#" },
-                        { idRecurso: 4, titulo: "Como Manter o Foco no Trabalho Remoto", categoria: "Produtividade", linkExterno: "#" }
-                    ];
-                    
-                    const data = mockRecursos; // Usando mock
-                    
-                    /*
-                    // --- CÓDIGO REAL (quando o backend estiver pronto) ---
+                    // --- CÓDIGO REAL ---
                     const response = await fetch(url);
-                    if (!response.ok) throw new Error("Erro ao buscar dados");
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || "Erro ao buscar dados");
+                    }
                     const data = await response.json();
-                    */
                    
                     tableBody.innerHTML = ''; // Limpa a tabela
                     if (data && data.length > 0) {
@@ -252,33 +227,23 @@
 
                 } catch (error) {
                     console.error("Erro ao carregar recursos:", error);
-                    tableMessage.textContent = 'Erro ao carregar recursos. O backend está rodando?';
+                    tableMessage.textContent = 'Erro ao carregar recursos: ' + error.message;
                     tableMessage.classList.add('text-red-500');
                 }
             }
             
             // Função Global para Deletar (CRUD - Delete)
-            // Deixamos como global (anexada ao window) para que o `onclick` na tabela funcione
             window.deleteRecurso = async (id) => {
                 if (!confirm(`Tem certeza que deseja excluir o recurso ID ${id}?`)) {
                     return;
                 }
                 
                 // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                // O Servlet /demo/admin/recursos deve responder a DELETE
+                // O Servlet /demo/admin-recursos responde a DELETE
                 const url = `/demo/admin-recursos?id=${id}`;
                 
                 try {
-                    // ** SIMULAÇÃO DE DELETE **
-                    console.log(`Simulando DELETE para o ID: ${id}`);
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    
-                    // Remove a linha da tabela na interface
-                    document.querySelector(`tr[data-id="${id}"]`).remove();
-                    alert("Recurso deletado (simulação).");
-                    
-                    /*
-                    // --- CÓDIGO REAL (quando o backend estiver pronto) ---
+                    // --- CÓDIGO REAL ---
                     const response = await fetch(url, { method: 'DELETE' });
                     const data = await response.json();
 
@@ -288,7 +253,6 @@
                     } else {
                         alert("Erro ao deletar recurso: " + data.message);
                     }
-                    */
                 
                 } catch (error) {
                     console.error("Erro ao deletar:", error);

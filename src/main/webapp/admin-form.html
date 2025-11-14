@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <!-- Configuração do Tailwind (IDÊNTICA às outras) -->
     <script>
         tailwind.config = {
             darkMode: "class",
@@ -47,7 +46,6 @@
 <body
     class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark">
     <div class="relative flex min-h-screen w-full">
-        <!-- Barra Lateral do Admin (IDÊNTICA às outras) -->
         <aside
             class="flex w-64 flex-col border-r border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark p-4 sticky top-0 h-screen">
             <div class="flex items-center gap-3 p-3">
@@ -72,7 +70,6 @@
                         <p class="text-sm font-medium leading-normal">Gerenciar Recursos</p>
                     </a>
                 </div>
-                <!-- Perfil do Usuário na Sidebar -->
                 <div class="flex flex-col gap-4 border-t border-border-light dark:border-border-dark pt-4">
                     <div class="flex gap-3 items-center">
                          <div id="user-avatar" class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
@@ -81,7 +78,7 @@
                         </div>
                         <div class="flex flex-col">
                             <h1 id="user-name" class="text-base font-medium leading-normal text-text-main-light dark:text-text-main-dark">Admin...</h1>
-                            <p class="text-sm font-normal leading-normal text-text-secondary-light dark:text-text-secondary-dark">Admin</JSON.parse(usuarioString);
+                            <p class="text-sm font-normal leading-normal text-text-secondary-light dark:text-text-secondary-dark">Admin</p>
                         </div>
                     </div>
                      <button id="logout-button-sidebar"
@@ -93,10 +90,8 @@
             </div>
         </aside>
 
-        <!-- Conteúdo Principal -->
         <main class="flex-1 p-8">
             <div class="max-w-4xl mx-auto">
-                <!-- Breadcrumbs -->
                 <div class="flex flex-wrap gap-2 items-center text-sm mb-6">
                     <a class="text-text-secondary-light dark:text-text-secondary-dark hover:text-primary dark:hover:text-primary" href="./admin-dashboard.html">Painel Admin</a>
                     <span class="text-text-secondary-light dark:text-text-secondary-dark">/</span>
@@ -107,16 +102,13 @@
                 
                 <h1 class="text-text-main-light dark:text-text-main-dark text-3xl font-bold tracking-tight mb-8" id="page-header">Adicionar Novo Recurso</h1>
                 
-                <!-- Mensagem de Erro/Sucesso -->
                 <div id="message-box" class="hidden w-full px-4 py-3 rounded-lg mb-6" role="alert">
                     <span class="block sm:inline" id="message-text"></span>
                 </div>
                 
-                <!-- Formulário (CRUD - Create/Update) -->
                 <div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm">
                     <form id="recurso-form" class="p-8 space-y-8">
                         
-                        <!-- Campo oculto para o ID (usado no modo Edição) -->
                         <input type="hidden" id="idRecurso" name="idRecurso" value="">
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -144,13 +136,12 @@
                                 id="linkExterno" name="linkExterno" type="url" placeholder="https://..." required />
                         </div>
                         
-                        <!-- Botões de Ação -->
                         <div class="flex justify-end gap-4 pt-4 border-t border-border-light dark:border-border-dark">
                             <a href="./admin-recursos.html"
                                 class="px-6 py-2.5 rounded-lg text-sm font-semibold bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                                 type="button">Cancelar</a>
                             <button
-                                class="px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-opacity-90 transition-colors"
+                                classs="px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-opacity-90 transition-colors"
                                 type="submit" id="save-button">Salvar Recurso</button>
                         </div>
                     </form>
@@ -159,7 +150,6 @@
         </main>
     </div>
 
-    <!-- JavaScript da Página -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Gerenciamento de Sessão (Admin) ---
@@ -232,25 +222,14 @@
             // Função para carregar os dados do recurso no formulário (Modo Edição)
             async function loadRecursoParaEditar(id) {
                 // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                // O Servlet /demo/admin/recursos deve responder a GET com ?id=...
+                // O Servlet /demo/admin-recursos responde a GET com ?id=...
                 const url = `/demo/admin-recursos?id=${id}`;
                 
                 try {
-                    // ** SIMULAÇÃO DE DADOS (Enquanto o backend não está pronto) **
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    const mockRecurso = { idRecurso: id, titulo: "Guia de Meditação para Iniciantes", categoria: "Ansiedade", descricao: "Uma prática rápida...", linkExterno: "https://exemplo.com" };
-
-                    // Popula o formulário
-                    idRecursoInput.value = mockRecurso.idRecurso;
-                    tituloInput.value = mockRecurso.titulo;
-                    categoriaInput.value = mockRecurso.categoria;
-                    descricaoInput.value = mockRecurso.descricao;
-                    linkExternoInput.value = mockRecurso.linkExterno;
-                    
-                    /*
-                    // --- CÓDIGO REAL (quando o backend estiver pronto) ---
+                    // --- CÓDIGO REAL ---
                     const response = await fetch(url);
                     const recurso = await response.json();
+                    
                     if(response.ok) {
                         idRecursoInput.value = recurso.idRecurso;
                         tituloInput.value = recurso.titulo;
@@ -260,7 +239,6 @@
                     } else {
                         throw new Error(recurso.message || "Recurso não encontrado");
                     }
-                    */
                 
                 } catch (error) {
                     showMessage(error.message, 'error');
@@ -280,7 +258,7 @@
                 };
 
                 // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                // O Servlet /demo/admin-recursos deve responder a POST (para criar) e PUT (para atualizar)
+                // O Servlet /demo/admin-recursos responde a POST (para criar) e PUT (para atualizar)
                 const url = '/demo/admin-recursos';
                 const method = isEditMode ? 'PUT' : 'POST';
 
@@ -288,22 +266,7 @@
                 saveButton.textContent = 'Salvando...';
 
                 try {
-                    // ** SIMULAÇÃO DE SAVE **
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    console.log("Simulando", method, "para", JSON.stringify(formData));
-                    const mockResponse = { status: "success", message: `Recurso ${isEditMode ? 'atualizado' : 'criado'} com sucesso!` };
-
-                    if (mockResponse.status === 'success') {
-                        showMessage(mockResponse.message, 'success');
-                        setTimeout(() => {
-                            window.location.href = './admin-recursos.html';
-                        }, 1500);
-                    } else {
-                        throw new Error(mockResponse.message);
-                    }
-
-                    /*
-                    // --- CÓDIGO REAL (quando o backend estiver pronto) ---
+                    // --- CÓDIGO REAL ---
                     const response = await fetch(url, {
                         method: method,
                         headers: { 'Content-Type': 'application/json' },
@@ -320,7 +283,6 @@
                     } else {
                         throw new Error(data.message || "Erro ao salvar recurso");
                     }
-                    */
 
                 } catch (error) {
                     showMessage(error.message, 'error');
