@@ -1,5 +1,6 @@
 package br.com.fiap.zenwork.controller;
 
+import br.com.fiap.zenwork.dao.UsuarioDAO;
 import br.com.fiap.zenwork.model.Usuario;
 import com.google.gson.Gson;
 
@@ -11,76 +12,71 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
-// *** IMPORTANTE: Verifique se você está usando 'javax' e não 'jakarta' ***
-// Se você trocou o POM para 'jakarta', troque os 'javax' abaixo.
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         Gson gson = new Gson();
 
+        Map<String, Object> jsonResponse = new HashMap<>();
+
         try {
-            // 1. Decodificar o JSON vindo do frontend
+            // 1. Ler o JSON vindo do login.html
             Map<String, String> loginData = gson.fromJson(request.getReader(), Map.class);
-            String tipo = loginData.get("tipo"); // "usuario" ou "admin"
+            String email = loginData.get("email");
+            String senha = loginData.get("senha");
 
-            Usuario usuario = null;
-
-            // 2. Lógica de "Mock" (Login Falso) - Como você pediu
-            if ("admin".equals(tipo)) {
-                usuario = new Usuario();
-                usuario.setIdUsuario(1); // ID Fixo para admin
-                usuario.setNome("Maria Silva (Admin)");
-                usuario.setEmail("admin@zen.work"); // Email de admin
-                usuario.setAdmin(true); // *** IMPORTANTE ***
-            } else if ("usuario".equals(tipo)) {
-                usuario = new Usuario();
-                usuario.setIdUsuario(2); // ID Fixo para funcionário
-                usuario.setNome("João");
-                usuario.setEmail("joao@zen.work"); // Email de funcionário
-                usuario.setAdmin(false); // *** IMPORTANTE ***
-            }
+            // 2. Chamar o DAO para consultar o banco
+            UsuarioDAO dao = new UsuarioDAO();
+            Usuario usuario = dao.buscarPorEmailESenha(email, senha); // <-- USA O BANCO DE DADOS
 
             if (usuario != null) {
-                // 3. Criar a Sessão
+                // 3. SUCESSO!
                 HttpSession session = request.getSession();
                 session.setAttribute("usuarioLogado", usuario);
 
-                // 4. Preparar a Resposta JSON
-                Map<String, Object> responseData = new HashMap<>();
-                responseData.put("status", "success");
-                responseData.put("usuario", usuario);
+                // 4. Preparar resposta de sucesso
+                jsonResponse.put("status", "success");
+                jsonResponse.put("usuario", usuario); // Envia o objeto usuário para o JS
                 
-                // *** A MÁGICA ESTÁ AQUI ***
-                // Define para qual página o frontend deve redirecionar
+                // 5. Define o redirecionamento
                 if(usuario.isAdmin()) {
-                    responseData.put("redirectUrl", "./admin-dashboard.html");
+                    jsonResponse.put("redirectUrl", "./admin-dashboard.html");
                 } else {
-                    responseData.put("redirectUrl", "./dashboard.html");
+                    jsonResponse.put("redirectUrl", "./dashboard.html");
                 }
-
-                out.print(gson.toJson(responseData));
+                
             } else {
-                throw new Exception("Tipo de usuário inválido");
+                // 6. FALHA!
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                jsonResponse.put("status", "error");
+                jsonResponse.put("message", "E-mail ou senha inválidos.");
             }
 
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500
+            jsonResponse.put("status", "error");
+            jsonResponse.put("message", "Erro no servidor: " + e.getMessage());
+            e.printStackTrace();
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            Map<String, String> errorData = new HashMap<>();
-            errorData.put("status", "error");
-            errorData.put("message", "Erro no servidor: " + e.getMessage());
-            out.print(gson.toJson(errorData));
-        } finally {
-            out.flush();
+             response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+            jsonResponse.put("status", "error");
+            jsonResponse.put("message", "Erro: " + e.getMessage());
+            e.printStackTrace();
         }
+
+        out.print(gson.toJson(jsonResponse));
+        out.flush();
     }
 }

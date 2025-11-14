@@ -5,9 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>ZenWork - Login</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <script>
         tailwind.config = {
@@ -15,7 +13,7 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#48B2A9", // Verde-azulado calmo
+                        "primary": "#48B2A9", // Cor unificada
                         "background-light": "#F8F9FA",
                         "background-dark": "#111c21",
                         "text-main-light": "#343A40",
@@ -27,134 +25,130 @@
                         "card-light": "#FFFFFF",
                         "card-dark": "#1a2a32",
                     },
-                    fontFamily: {
-                        "display": ["Inter", "sans-serif"]
-                    },
+                    fontFamily: { "display": ["Inter", "sans-serif"] },
                     borderRadius: { "DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px" },
                 },
             },
         }
     </script>
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
-        }
-    </style>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark">
     <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
         <div class="layout-container flex h-full grow flex-col">
             <main class="flex flex-1 justify-center items-center py-5">
-                <div class="layout-content-container flex flex-col w-full max-w-sm p-6">
-                    <!-- Logo -->
+                <div class="layout-content-container flex flex-col w-full max-w-md p-6">
                     <div class="flex justify-center mb-6">
-                         <div class="text-primary size-10">
-                            <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M39.5563 34.1455V13.8546C39.5563 15.708 36.8773 17.3437 32.7927 18.3189C30.2914 18.916 27.263 19.2655 24 19.2655C20.737 19.2655 17.7086 18.916 15.2073 18.3189C11.1227 17.3437 8.44365 15.708 8.44365 13.8546V34.1455C8.44365 35.9988 11.1227 37.6346 15.2073 38.6098C17.7086 39.2069 20.737 39.5564 24 39.5564C27.263 39.5564 30.2914 39.2069 32.7927 38.6098C36.8773 37.6346 39.5563 35.9988 39.5563 34.1455Z"></path>
-                                <path clip-rule="evenodd" d="M10.4485 13.8519C10.4749 13.9271 10.6203 14.246 11.379 14.7361C12.298 15.3298 13.7492 15.9145 15.6717 16.3735C18.0007 16.9296 20.8712 17.2655 24 17.2655C27.1288 17.2655 29.9993 16.9296 32.3283 16.3735C34.2508 15.9145 35.702 15.3298 36.621 14.7361C37.3796 14.246 37.5251 13.9271 37.5515 13.8519C37.5287 13.7876 37.4333 13.5973 37.0635 13.2931C36.5266 12.8516 35.6288 12.3647 34.343 11.9175C31.79 11.0295 28.1333 10.4437 24 10.4437C19.8667 10.4437 16.2099 11.0295 13.657 11.9175C12.3712 12.3647 11.4734 12.8516 10.9365 13.2931C10.5667 13.5973 10.4713 13.7876 10.4485 13.8519ZM37.5563 18.7877C36.3176 19.3925 34.8502 19.8839 33.2571 20.2642C30.5836 20.9025 27.3973 21.2655 24 21.2655C20.6027 21.2655 17.4164 20.9025 14.7429 20.2642C13.1498 19.8839 11.6824 19.3925 10.4436 18.7877V34.1275C10.4515 34.1545 10.5427 34.4867 11.379 35.027C12.298 35.6207 13.7492 36.2054 15.6717 36.6644C18.0007 37.2205 20.8712 37.5564 24 37.5564C27.1288 37.5564 29.9993 37.2205 32.3283 36.6644C34.2508 36.2054 35.702 35.6207 36.621 35.027C37.4573 34.4867 37.5485 34.1546 37.5563 34.1275V18.7877ZM41.5563 13.8546V34.1455C41.5563 36.1078 40.158 37.5042 38.7915 38.3869C37.3498 39.3182 35.4192 40.0389 33.2571 40.5551C30.5836 41.1934 27.3973 41.5564 24 41.5564C20.6027 41.5564 17.4164 41.1934 14.7429 40.5551C12.5808 40.0389 10.6502 39.3182 9.20848 38.3869C7.84205 37.5042 6.44365 36.1078 6.44365 34.1455L6.44365 13.8546C6.44365 12.2684 7.37223 11.0454 8.39581 10.2036C9.43325 9.3505 10.8137 8.67141 12.343 8.13948C15.4203 7.06909 19.5418 6.44366 24 6.44366C28.4582 6.44366 32.5797 7.06909 35.657 8.13948C37.1863 8.67141 38.5667 9.3505 39.6042 10.2036C40.6278 11.0454 41.5563 12.2684 41.5563 13.8546Z" fill-rule="evenodd"></path>
-                            </svg>
-                        </div>
+                        <svg aria-label="ZenWork Logo" class="h-10 w-auto text-primary" fill="currentColor" role="img" viewBox="0 0 48 48">
+                           <path d="M39.5563 34.1455V13.8546C39.5563 15.708 36.8773 17.3437 32.7927 18.3189C30.2914 18.916 27.263 19.2655 24 19.2655C20.737 19.2655 17.7086 18.916 15.2073 18.3189C11.1227 17.3437 8.44365 15.708 8.44365 13.8546V34.1455C8.44365 35.9988 11.1227 37.6346 15.2073 38.6098C17.7086 39.2069 20.737 39.5564 24 39.5564C27.263 39.5564 30.2914 39.2069 32.7927 38.6098C36.8773 37.6346 39.5563 35.9988 39.5563 34.1455Z"></path>
+                           <path clip-rule="evenodd" d="M10.4485 13.8519C10.4749 13.9271 10.6203 14.246 11.379 14.7361C12.298 15.3298 13.7492 15.9145 15.6717 16.3735C18.0007 16.9296 20.8712 17.2655 24 17.2655C27.1288 17.2655 29.9993 16.9296 32.3283 16.3735C34.2508 15.9145 35.702 15.3298 36.621 14.7361C37.3796 14.246 37.5251 13.9271 37.5515 13.8519C37.5287 13.7876 37.4333 13.5973 37.0635 13.2931C36.5266 12.8516 35.6288 12.3647 34.343 11.9175C31.79 11.0295 28.1333 10.4437 24 10.4437C19.8667 10.4437 16.2099 11.0295 13.657 11.9175C12.3712 12.3647 11.4734 12.8516 10.9365 13.2931C10.5667 13.5973 10.4713 13.7876 10.4485 13.8519ZM37.5563 18.7877C36.3176 19.3925 34.8502 19.8839 33.2571 20.2642C30.5836 20.9025 27.3973 21.2655 24 21.2655C20.6027 21.2655 17.4164 20.9025 14.7429 20.2642C13.1498 19.8839 11.6824 19.3925 10.4436 18.7877V34.1275C10.4515 34.1545 10.5427 34.4867 11.379 35.027C12.298 35.6207 13.7492 36.2054 15.6717 36.6644C18.0007 37.2205 20.8712 37.5564 24 37.5564C27.1288 37.5564 29.9993 37.2205 32.3283 36.6644C34.2508 36.2054 35.702 35.6207 36.621 35.027C37.4573 34.4867 37.5485 34.1546 37.5563 34.1275V18.7877ZM41.5563 13.8546V34.1455C41.5563 36.1078 40.158 37.5042 38.7915 38.3869C37.3498 39.3182 35.4192 40.0389 33.2571 40.5551C30.5836 41.1934 27.3973 41.5564 24 41.5564C20.6027 41.5564 17.4164 41.1934 14.7429 40.5551C12.5808 40.0389 10.6502 39.3182 9.20848 38.3869C7.84205 37.5042 6.44365 36.1078 6.44365 34.1455L6.44365 13.8546C6.44365 12.2684 7.37223 11.0454 8.39581 10.2036C9.43325 9.3505 10.8137 8.67141 12.343 8.13948C15.4203 7.06909 19.5418 6.44366 24 6.44366C28.4582 6.44366 32.5797 7.06909 35.657 8.13948C37.1863 8.67141 38.5667 9.3505 39.6042 10.2036C40.6278 11.0454 41.5563 12.2684 41.5563 13.8546Z" fill-rule="evenodd"></path>
+                        </svg>
                     </div>
-                    
-                    <h1 class="text-text-main-light dark:text-text-main-dark tracking-tight text-[32px] font-bold leading-tight text-center pb-2">Selecione seu perfil</h1>
-                    <p class="text-text-secondary-light dark:text-text-secondary-dark text-base font-normal leading-normal pb-6 text-center">Entre como funcionário ou administrador.</p>
-                    
-                    <!-- Mensagem de Erro (inicialmente oculta) -->
+
+                    <h1 class="text-text-main-light dark:text-text-main-dark tracking-tight text-[32px] font-bold leading-tight text-center pb-2">Bem-vindo de volta</h1>
+                    <p class="text-text-secondary-light dark:text-text-secondary-dark text-base font-normal leading-normal pb-6 text-center">Faça seu login para continuar.</p>
+
                     <div id="error-message" class="hidden w-full bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4" role="alert">
                         <span class="block sm:inline" id="error-text"></span>
                     </div>
 
-                    <!-- Botões de Login -->
-                    <div class="w-full flex flex-col gap-4 pt-4">
-                        <button id="login-usuario" data-tipo="usuario" class="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark transition-colors">
-                            <span class="truncate">Entrar como Funcionário</span>
-                        </button>
-                        
-                        <button id="login-admin" data-tipo="admin" class="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-gray-600 text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 focus:ring-offset-background-light dark:focus:ring-offset-background-dark transition-colors">
-                            <span class="truncate">Entrar como Administrador</span>
-                        </button>
+                    <form id="login-form" class="w-full flex flex-col gap-4">
+                        <div class="w-full">
+                            <label class="flex flex-col w-full">
+                                <p class="text-text-main-light dark:text-text-main-dark text-base font-medium leading-normal pb-2">E-mail</p>
+                                <input id="email" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-main-light dark:text-text-main-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark h-14 placeholder:text-text-secondary-light dark:placeholder:text-text-secondary-dark p-[15px] text-base font-normal leading-normal" placeholder="Digite seu e-mail" type="email" value="" required />
+                            </label>
+                        </div>
+                        <div class="w-full">
+                            <label class="flex flex-col w-full">
+                                <p class="text-text-main-light dark:text-text-main-dark text-base font-medium leading-normal pb-2">Senha</p>
+                                <div class="relative flex w-full flex-1 items-stretch">
+                                    <input id="password" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-text-main-light dark:text-text-main-dark focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark h-14 placeholder:text-text-secondary-light dark:placeholder:text-text-secondary-dark p-[15px] pr-12 text-base font-normal leading-normal" placeholder="Digite sua senha" type="password" value="" required />
+                                    <div id="toggle-password" class="absolute right-0 top-0 h-full flex items-center justify-center pr-4 text-text-secondary-light dark:text-text-secondary-dark cursor-pointer">
+                                        <span class="material-symbols-outlined">visibility</span>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="w-full pt-4">
+                            <button id="login-button" type="submit" class="flex min-w-[84px] w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark transition-colors">
+                                <span class="truncate">Entrar</span>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="pt-6 text-center">
+                        <p class="text-sm text-text-secondary-light dark:text-text-secondary-dark">Ainda não tem conta? <a class="font-medium text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary rounded" href="./cadastro.html">Cadastre-se</a></p>
                     </div>
-
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Script de Interação -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const loginUsuarioBtn = document.getElementById('login-usuario');
-            const loginAdminBtn = document.getElementById('login-admin');
-            const errorMessage = document.getElementById('error-message');
-            const errorText = document.getElementById('error-text');
+    document.addEventListener("DOMContentLoaded", () => {
+        
+        const loginForm = document.getElementById("login-form");
+        const emailInput = document.getElementById("email");
+        const senhaInput = document.getElementById("password");
+        const submitButton = document.getElementById("login-button");
+        const errorMessageDiv = document.getElementById("error-message");
+        const errorText = document.getElementById("error-text");
 
-            // Função de login
-            const handleLogin = async (tipo) => {
-                // Desabilita os dois botões
-                loginUsuarioBtn.disabled = true;
-                loginAdminBtn.disabled = true;
-                loginAdminBtn.textContent = 'Entrando...';
-                loginUsuarioBtn.textContent = 'Entrando...';
-                errorMessage.classList.add('hidden');
+        // Lógica para mostrar/esconder senha
+        const togglePassword = document.getElementById("toggle-password");
+        if (togglePassword) {
+            togglePassword.addEventListener("click", () => {
+                const type = senhaInput.getAttribute("type") === "password" ? "text" : "password";
+                senhaInput.setAttribute("type", type);
+                togglePassword.querySelector("span").textContent = type === "password" ? "visibility" : "visibility_off";
+            });
+        }
 
-                const loginData = { tipo: tipo };
+        // Adiciona um "listener" para o envio do formulário
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault(); 
+            
+            submitButton.disabled = true;
+            submitButton.querySelector("span").textContent = "Entrando...";
+            errorMessageDiv.classList.add("hidden"); 
 
-                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                // O Servlet está mapeado para "/login" no web.xml (ou @WebServlet)
-                // O nome do projeto (ArtifactId) é "demo" no pom.xml
-                // A URL completa é: /<artifactId>/<servlet-mapping>
-                const url = '/demo/login';
+            const email = emailInput.value;
+            const senha = senhaInput.value;
 
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(loginData)
-                    });
+            // URL do Servlet de Login
+            const url = "/demo/login"; 
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email, senha: senha })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    submitButton.querySelector("span").textContent = "Redirecionando...";
                     
-                    if (!response.ok) {
-                        // Tenta ler a mensagem de erro do backend
-                        let errorMsg = "Erro desconhecido";
-                        try {
-                            const errorData = await response.json();
-                            errorMsg = errorData.message || `Erro ${response.status}`;
-                        } catch(e) {
-                            errorMsg = `Erro ${response.status} - ${response.statusText}`;
-                        }
-                        throw new Error(errorMsg);
-                    }
+                    // Salva o usuário na sessão do navegador
+                    sessionStorage.setItem('zenworkUser', JSON.stringify(data.usuario));
                     
-                    const data = await response.json();
-
-                    if (data.status === "success" && data.usuario && data.redirectUrl) {
-                        // Salva o objeto usuário no sessionStorage
-                        sessionStorage.setItem('zenworkUser', JSON.stringify(data.usuario));
-                        
-                        // *** CORREÇÃO AQUI ***
-                        // Redireciona para a URL que o backend mandou
-                        window.location.href = data.redirectUrl;
-
-                    } else {
-                        throw new Error(data.message || "Resposta inválida do servidor");
-                    }
-
-                } catch (error) {
-                    console.error("Erro no login:", error);
-                    errorText.textContent = "Não foi possível conectar ao servidor: " + error.message;
-                    errorMessage.classList.remove('hidden');
-                    
-                    // Reabilita os botões
-                    loginUsuarioBtn.disabled = false;
-                    loginAdminBtn.disabled = false;
-                    loginAdminBtn.textContent = 'Entrar como Administrador';
-                    loginUsuarioBtn.textContent = 'Entrar como Funcionário';
+                    // Redireciona para a URL que o backend mandou
+                    window.location.href = data.redirectUrl; 
+                } else {
+                    throw new Error(data.message || "Erro desconhecido");
                 }
-            };
 
-            // Adiciona o evento de clique aos botões
-            loginUsuarioBtn.addEventListener('click', () => handleLogin('usuario'));
-            loginAdminBtn.addEventListener('click', () => handleLogin('admin'));
+            } catch (error) {
+                // Erro de rede ou erro do backend
+                errorText.textContent = error.message;
+                errorMessageDiv.classList.remove("hidden");
+                submitButton.disabled = false;
+                submitButton.querySelector("span").textContent = "Entrar";
+            }
         });
-    </script>
+    });
+</script>
+    
 </body>
 </html>
