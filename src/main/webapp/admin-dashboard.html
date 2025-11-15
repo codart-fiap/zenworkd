@@ -178,126 +178,56 @@
     <!-- JavaScript da Página -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Gerenciamento de Sessão (Admin) ---
+            // --- 1. Gerenciamento de Sessão (Admin) ---
             const userNameEl = document.getElementById('user-name');
             const userAvatarEl = document.getElementById('user-avatar');
             const welcomeMessageEl = document.getElementById('welcome-message');
             const logoutButtonSidebar = document.getElementById('logout-button-sidebar');
 
-            const usuarioString = sessionStorage.getItem('zenworkUser');
             let usuario = null;
 
-            if (usuarioString) {
-                try {
-                    usuario = JSON.parse(usuarioString);
-                } catch (e) {
-                    console.error("Erro ao ler dados da sessão:", e);
-                    window.location.href = './login.html';
-                }
+            try {
+                const usuarioString = sessionStorage.getItem('zenworkUser');
+                if (usuarioString) usuario = JSON.parse(usuarioString);
+            } catch (e) {
+                console.error("Erro na sessão:", e);
+                window.location.href = './login.html';
             }
 
-            // Esta é uma página de Admin. Se o usuário não for admin, expulsa ele.
             if (!usuario || !usuario.isAdmin) {
-                console.warn("Acesso não autorizado. Usuário não é admin.");
+                alert("Acesso restrito a administradores.");
                 sessionStorage.removeItem('zenworkUser');
                 window.location.href = './login.html';
             } else {
-                // Popula os dados do Admin
-                const adminName = usuario.nome.split(' ')[0]; // Pega só o primeiro nome
+                const adminName = usuario.nome.split(' ')[0];
                 userNameEl.textContent = adminName;
                 welcomeMessageEl.textContent = `Olá, ${adminName}!`;
-                const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'A';
-                userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/24a5e5/FFFFFF?text=${inicial}&font=inter")`;
-            }
-
-            // Lógica de Logout
-            function handleLogout(e) {
-                e.preventDefault();
-                sessionStorage.removeItem('zenworkUser');
-                console.log('Logout...');
-                window.location.href = './login.html';
-            }
-            
-            logoutButtonSidebar.addEventListener('click', handleLogout);
-            // O botão de logout no header (se existir)
-            const logoutButtonHeader = document.querySelector('header #logout-button');
-            if(logoutButtonHeader) {
-                logoutButtonHeader.addEventListener('click', handleLogout);
-            }
-            // --- Fim da Sessão ---
-
-
-            // --- Lógica do Dashboard (Gráficos e Stats) ---
-
-            const statsContainer = document.getElementById('stats-cards-container');
-            const topicosContainer = document.getElementById('topicos-container');
-            
-            // Função para buscar os dados do dashboard
-            async function loadDashboardData() {
-                // *** PONTO DE INTEGRAÇÃO COM O BACKEND JAVA ***
-                // Você precisará criar um Servlet (ex: /demo/admin-dashboard)
-                // que retorne um JSON com os dados agregados.
-                const url = '/demo/admin-dashboard'; // Mapeamento do seu novo Servlet
-
-                try {
-                    // ** SIMULAÇÃO DE DADOS (Enquanto o backend não está pronto) **
-                    // Na vida real, você faria:
-                    // const response = await fetch(url);
-                    // if (!response.ok) throw new Error("Erro ao buscar dados do dashboard");
-                    // const data = await response.json();
-                    
-                    // Usando mock data por enquanto:
-                    await new Promise(resolve => setTimeout(resolve, 500)); // Simula rede
-                    const mockData = {
-                        stats: [
-                            { label: "Taxa de Engajamento", value: "78%", trend: "+5.2%", positive: true },
-                            { label: "Check-ins (Hoje)", value: "82", trend: "de 105", positive: null },
-                            { label: "Sentimento Médio", value: "Neutro", trend: "Tendência de queda", positive: false },
-                            { label: "Recursos Ativos", value: "12", trend: "artigos e vídeos", positive: null }
-                        ],
-                        tendencia: {
-                            labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
-                            data: [3.2, 3.5, 3.1, 3.8, 4.0, 3.9, 3.7] // Média (1=Estressado, 4=Feliz)
-                        },
-                        sentimento: {
-                            labels: ["Feliz", "Neutro", "Cansado", "Estressado"],
-                            data: [45, 25, 15, 15] // Contagem de cada
-                        },
-                        topicos: ["Carga de Trabalho", "Comunicação", "Equilíbrio", "Prazos", "Reconhecimento"]
-                    };
-                    
-                    const data = mockData; // Fim da simulação
-                    
-                    // 1. Preencher os Stats Cards
-                    statsContainer.innerHTML = '';
-                    data.stats.forEach(stat => {
-                        statsContainer.innerHTML += createStatCard(stat);
-                    });
-                    
-                    // 2. Preencher os Tópicos
-                    topicosContainer.innerHTML = '';
-                    data.topicos.forEach(topico => {
-                        topicosContainer.innerHTML += `<span class="rounded-full bg-primary/20 dark:bg-primary/30 px-4 py-1.5 text-sm font-medium text-text-main-light dark:text-text-main-dark">${topico}</span>`;
-                    });
-
-                    // 3. Renderizar Gráficos
-                    renderTendenciaChart(data.tendencia);
-                    renderSentimentoChart(data.sentimento);
-
-                } catch (error) {
-                    console.error("Erro ao carregar dados do dashboard:", error);
-                    statsContainer.innerHTML = `<p class="text-red-500 col-span-4">Erro ao carregar dados do dashboard.</p>`;
+                const inicial = adminName.charAt(0).toUpperCase();
+                if (userAvatarEl) {
+                    userAvatarEl.style.backgroundImage = `url("https://placehold.co/100x100/24a5e5/FFFFFF?text=${inicial}&font=inter")`;
                 }
             }
 
+            logoutButtonSidebar.addEventListener('click', (e) => {
+                e.preventDefault();
+                sessionStorage.removeItem('zenworkUser');
+                window.location.href = './login.html';
+            });
+            // --- Fim da Sessão ---
+
+
+            // --- 2. Lógica do Dashboard (Dados Reais) ---
+            const statsContainer = document.getElementById('stats-cards-container');
+            const topicosContainer = document.getElementById('topicos-container');
+            
             // Função para criar os cards de estatística
             function createStatCard(stat) {
                 let trendHtml = '';
                 if (stat.trend) {
-                    let trendColor = "text-text-secondary-light dark:text-text-secondary-dark"; // Neutro
-                    if(stat.positive === true) trendColor = "text-positive";
-                    if(stat.positive === false) trendColor = "text-red-500";
-
+                    // Lógica simples para cor: "Alertas" fica vermelho, outros neutros
+                    let trendColor = "text-text-secondary-light dark:text-text-secondary-dark"; 
+                    if(stat.trend === "Alertas") trendColor = "text-red-500 font-bold";
+                    
                     trendHtml = `<p class="text-sm font-medium leading-normal ${trendColor}">${stat.trend}</p>`;
                 }
 
@@ -309,8 +239,8 @@
                     </div>
                 `;
             }
-            
-            // Função para renderizar o Gráfico de Tendência (Linha)
+
+            // Gráfico de Tendência (Linha)
             function renderTendenciaChart(data) {
                 const ctx = document.getElementById('tendenciaChart').getContext('2d');
                 new Chart(ctx, {
@@ -318,7 +248,7 @@
                     data: {
                         labels: data.labels,
                         datasets: [{
-                            label: 'Sentimento Médio (1=Estressado, 4=Feliz)',
+                            label: 'Nível de Bem-Estar (Média)',
                             data: data.data,
                             borderColor: '#24a5e5',
                             backgroundColor: 'rgba(36, 165, 229, 0.1)',
@@ -329,23 +259,13 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: false,
-                                max: 4,
-                                min: 1
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        }
+                        scales: { y: { beginAtZero: false, max: 5, min: 0 } },
+                        plugins: { legend: { display: false } }
                     }
                 });
             }
 
-            // Função para renderizar o Gráfico de Sentimento (Rosquinha/Doughnut)
+            // Gráfico de Sentimento (Rosquinha)
             function renderSentimentoChart(data) {
                 const ctx = document.getElementById('sentimentoChart').getContext('2d');
                 new Chart(ctx, {
@@ -353,14 +273,9 @@
                     data: {
                         labels: data.labels,
                         datasets: [{
-                            label: 'Sentimento Geral',
+                            label: 'Total',
                             data: data.data,
-                            backgroundColor: [
-                                '#F2C94C', // Feliz
-                                '#BDBDBD', // Neutro
-                                '#9B51E0', // Cansado
-                                '#EB5757'  // Estressado
-                            ],
+                            backgroundColor: ['#F2C94C', '#BDBDBD', '#9B51E0', '#EB5757'],
                             borderWidth: 0
                         }]
                     },
@@ -370,18 +285,56 @@
                         plugins: {
                             legend: {
                                 position: 'bottom',
-                                labels: {
-                                    color: document.body.classList.contains('dark') ? '#f0f2f4' : '#0e171b'
-                                }
+                                labels: { color: document.body.classList.contains('dark') ? '#f0f2f4' : '#0e171b' }
                             }
                         }
                     }
                 });
             }
 
-            // Carregar os dados ao iniciar a página
-            loadDashboardData();
+            // Carregar Dados do Backend
+            async function loadDashboardData() {
+                // *** URL REAL DO SEU SERVLET ***
+                const url = '/demo/admin-dashboard'; 
 
+                try {
+                    // Faz a chamada real ao Java
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error("Erro ao buscar dados do dashboard");
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // 1. Preencher Stats
+                    statsContainer.innerHTML = '';
+                    if (data.stats) {
+                        data.stats.forEach(stat => {
+                            statsContainer.innerHTML += createStatCard(stat);
+                        });
+                    }
+                    
+                    // 2. Preencher Tópicos
+                    topicosContainer.innerHTML = '';
+                    if (data.topicos) {
+                        data.topicos.forEach(topico => {
+                            topicosContainer.innerHTML += `<span class="rounded-full bg-primary/20 dark:bg-primary/30 px-4 py-1.5 text-sm font-medium text-text-main-light dark:text-text-main-dark">${topico}</span>`;
+                        });
+                    }
+
+                    // 3. Renderizar Gráficos com dados reais
+                    if (data.tendencia) renderTendenciaChart(data.tendencia);
+                    if (data.sentimento) renderSentimentoChart(data.sentimento);
+
+                } catch (error) {
+                    console.error("Erro:", error);
+                    statsContainer.innerHTML = `<p class="text-red-500 col-span-4">Erro ao carregar dados. Verifique se o servidor está rodando.</p>`;
+                }
+            }
+
+            // Inicia
+            loadDashboardData();
         });
     </script>
 </body>
