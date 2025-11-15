@@ -26,8 +26,10 @@ public class AdminRecursoServlet extends HttpServlet {
     // READ (Listar ou Buscar por ID)
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json");
+        resp.setContentType("\"application/json; charset=UTF-8\"");
         resp.setCharacterEncoding("UTF-8");
+
+ // Mantenha esta por segurança
         
         if (!isAdmin(req)) { 
             resp.setStatus(403); 
@@ -56,12 +58,14 @@ public class AdminRecursoServlet extends HttpServlet {
     // CREATE (Salvar Novo)
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8"); // <--- ADICIONE ESTA LINHA (Obrigatorio ser a primeira)
         processarSalvar(req, resp, false);
     }
 
     // UPDATE (Atualizar Existente)
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8"); // <--- ADICIONE ESTA LINHA
         processarSalvar(req, resp, true);
     }
 

@@ -73,9 +73,14 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.2</version>
         <configuration>
-          <port>8080</port>
-          <path>/${project.build.finalName}</path>
-        </configuration>
+            <port>8080</port>
+            <path>/${project.build.finalName}</path>
+            
+            <systemProperties>
+                <file.encoding>UTF-8</file.encoding>
+                <sun.jnu.encoding>UTF-8</sun.jnu.encoding>
+            </systemProperties>
+            </configuration>
       </plugin>
 
     </plugins>

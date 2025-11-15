@@ -26,8 +26,8 @@ public class RecursosServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+       response.setContentType("application/json; charset=UTF-8");
+       response.setCharacterEncoding("UTF-8"); // Mantenha esta por segurança
         PrintWriter out = response.getWriter();
         Map<String, Object> jsonResponse = new HashMap<>();
 
